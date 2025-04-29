@@ -1,3 +1,8 @@
+// imports
+import helpIcon from "../assets/help-white.png"; 
+import accountIcon from "../assets/account-white.png"; 
+import pencilIcon from "../assets/pencil-white.png"; 
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -16,7 +21,7 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
     const [isFocused, setIsFocused] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState<string | undefined>(undefined);
-    const [userName, setUserName] = useState<string | undefined>(undefined); // Store the user's name
+    const [userName, setUserName] = useState<string | undefined>(undefined);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -27,9 +32,8 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                 setToken(tokenFromCookie);
                 setIsLoggedIn(!!tokenFromCookie);
 
-                // Fetch user name if token exists (this could be a request to your backend)
                 if (tokenFromCookie) {
-                    const userNameFromCookie = Cookies.get("userName"); // Assume user name is stored in cookies
+                    const userNameFromCookie = Cookies.get("userName");
                     setUserName(userNameFromCookie);
                 }
             }
@@ -66,7 +70,7 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
 
     const handleLogout = () => {
         Cookies.remove("token");
-        Cookies.remove("userName"); // Remove userName from cookies
+        Cookies.remove("userName");
         setIsLoggedIn(false);
         setToken(undefined);
         setUserName(undefined);
@@ -145,15 +149,24 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                                         className="profile-dropdown-icon"
                                         style={{ width: "35px", height: "35px" }}
                                     />
-                                    <span style={{ color: "white", marginLeft: "10px" }}>
-                                        {userName || "User"} {/* Display user name */}
+                                    <span style={{  marginLeft: "20px" }}>
+                                        {userName || "User"}
                                     </span>
                                 </div>
                                 <ul>
-                                    <li style={{ cursor: "pointer" }}>Manage Profile</li>
-                                    <li style={{ cursor: "pointer" }}>Account</li>
-                                    <li style={{ cursor: "pointer" }}>Help Centre</li>
-                                    <li onClick={handleLogout} style={{ cursor: "pointer", color: "red" }}>
+                                    <li style={{ cursor: "pointer" }}>
+                                        <img src={pencilIcon} alt="Manage" style={{ width: "17px",float: "left", marginRight: "10px" }} />
+                                        Manage Profile
+                                    </li>
+                                    <li style={{ cursor: "pointer" }}>
+                                        <img src={accountIcon} alt="Account" style={{ width: "17px", float: "left", marginRight: "10px"  }} />
+                                        Account
+                                    </li>
+                                    <li style={{ cursor: "pointer" }}>
+                                        <img src={helpIcon} alt="Help" style={{ width: "17px",float: "left", marginRight: "10px"  }} />
+                                        Help Centre
+                                    </li>
+                                    <li onClick={handleLogout} style={{ cursor: "pointer",textAlign: "center"}} >
                                         Logout
                                     </li>
                                 </ul>
