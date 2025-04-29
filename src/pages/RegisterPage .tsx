@@ -9,62 +9,64 @@ import Cookies from "js-cookie";
 const RegisterPage: React.FC = () => {
   const [name, setName] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+
+    const cleanedName = name.trim();
+    const cleanedPhone = mobileNumber.trim();
+
+    if (!/^\d{10}$/.test(cleanedPhone)) {
+      alert("Please enter a valid 10-digit mobile number.");
+      setLoading(false);
+      return;
+    }
 
     const payload = {
-      name: name,
-      phone: mobileNumber,
+      name: cleanedName,
+      phone: cleanedPhone,
       device: "chrome",
       referrer: "TEST",
     };
 
     try {
       const response = await moviesApiClient.post("/register", payload);
-      console.log("API response:", response.data);
-
       const token = response?.data?.results?.token;
       const userId = response?.data?.results?.user?.id;
 
       if (token) {
-        // ✅ Save token in cookies and localStorage
         Cookies.set("token", token, { expires: 7, path: "/" });
         localStorage.setItem("token", token);
         if (userId) {
           localStorage.setItem("user_id", userId);
         }
 
-        console.log("Token stored:", token);
-
-        // ✅ Use token as Bearer token to fetch user profile
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
         try {
-          const profileResponse = await moviesApiClient.get("/profile", { headers });
-          console.log("User Profile:", profileResponse.data);
+          await moviesApiClient.get("/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
         } catch (profileError) {
-          console.error("Error fetching profile:", profileError);
+          console.error("Profile fetch failed:", profileError);
         }
 
         navigate("/otp", {
           state: {
-            name: name,
-            mobileNumber: mobileNumber, 
+            name: cleanedName,
+            mobileNumber: cleanedPhone,
             device: "chrome",
           },
         });
       } else {
-        console.error("Token is undefined");
-        alert("Something went wrong. Please try again.");
+        alert("Something went wrong. Token not received.");
       }
-
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,7 +99,9 @@ const RegisterPage: React.FC = () => {
                 required
               />
             </div>
-            <button type="submit" className="red-button">Next</button>
+            <button type="submit" className="red-button" disabled={loading}>
+              {loading ? "Processing..." : "Next"}
+            </button>
           </form>
           <p>
             Already have an account?{" "}

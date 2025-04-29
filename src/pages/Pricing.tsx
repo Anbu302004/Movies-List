@@ -51,8 +51,8 @@ const Pricing: React.FC = () => {
         marginTop: "-140px",
         marginBottom: "0"
       }} />
-      <div style={{ backgroundColor: '#0d0d0d', color: '#fff', minHeight: '100vh', padding: '50px 20px' }}>
-        <h1 style={{ textAlign: 'center', marginBottom: '50px' }}>Choose Your Pricing Plan</h1>
+      <div style={{ backgroundColor: '#191919', color: '#fff', minHeight: '100vh', padding: '50px 20px' }}>
+        <h1 style={{ textAlign: 'center', marginBottom: '100px', fontSize:"45px", }}>Choose Your Pricing Plan</h1>
         <p style={{ color: '#cc1e24', fontWeight: 'bold', marginLeft:"150px",lineHeight:"0.1px" }}>PRICING PLAN</p>
         <p style={{ color: '#ccc',marginLeft:"150px"  }}>
           Explore our range of plans to find the perfect fit for you.
