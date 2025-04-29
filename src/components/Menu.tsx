@@ -135,7 +135,7 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                         <img
                             src={notificationIcon}
                             className="notification-icon"
-                            style={{ width: "30px", height: "30px", padding: "5px", cursor: "pointer" }}
+                            style={{ width: "25px", height: "25px", padding: "5px", cursor: "pointer" }}
                         />
                         <div
                             className="profile-menu"
