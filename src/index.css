@@ -688,6 +688,7 @@ body {
   transition: 0.3s ease;
 }
 
+
 .login-button:hover {
   background-color: darkred;
 }
@@ -719,6 +720,45 @@ body {
   .movies-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .search-container {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu-list {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 250px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+    flex-direction: column;
+    padding: 20px;
+    transition: left 0.3s ease-in-out;
+  }
+
+  .menu-list.open {
+    left: 0;
+  }
+
+  .menu-item {
+    padding: 10px 0;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+  }
+
 }
 
 @media (max-width: 1024px) {
