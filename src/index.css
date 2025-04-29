@@ -599,7 +599,7 @@ body {
   display: flex;
   align-items: center;
   position: relative;
-  padding-left: 140px;
+  padding-left: 240px;
   margin-right: 10px;
 }
 
@@ -607,9 +607,9 @@ body {
   background: transparent;
   border: 1px solid #fff;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   padding: 5px 12px 8px 35px;
-  width: 170px;
+  width: 150px;
   border-radius: 5px;
   outline: none;
 }
@@ -695,7 +695,7 @@ body {
 
 .search-input-icon {
   position: absolute;
-  left: 150px;
+  left: 250px;
   width: 20px;
   height: 20px;
   cursor: pointer;
