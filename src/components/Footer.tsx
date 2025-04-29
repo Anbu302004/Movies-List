@@ -22,7 +22,7 @@ const Footer = () => {
           {/* Contact */}
           <div className='footer-section'>
             <h4>Contact</h4>
-            <img src={Logo} alt="Logo" className="footer-logo" />
+            <Link to="/"><img src={Logo} alt="Logo" className="footer-logo" /></Link>
             <p>Email us: support@bestcaststudios.com</p>
           </div>
 
@@ -31,7 +31,7 @@ const Footer = () => {
             <h4>Quick Links</h4>
             <ul>
               <li><Link to="/">My Account</Link></li>
-              <li><Link to="/support">Help & Support</Link></li>
+              <li><Link to="/help">Help & Support</Link></li>
               <li><Link to="/policy">Privacy Policy</Link></li>
               <li><Link to="/terms">Terms & Conditions</Link></li>
             </ul>

@@ -12,6 +12,7 @@ import searchActive from "../assets/search.png";
 import { FiMenu, FiX } from "react-icons/fi";
 import "../index.css";
 import profileIcon from "../assets/profile-1.jpg";
+import { Link } from "react-router-dom";
 
 const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) => {
     const { data: menuItems, isLoading, error } = useMenu();
@@ -161,7 +162,7 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                                             {userName || "User"}
                                         </span>
                                     </div>
-                                    <ul>
+                                    <ul style={{textDecoration: "none"}}>
                                         <li
                                             style={{ cursor: "pointer" }}
                                             onClick={() => navigate("/browse")}
@@ -181,13 +182,15 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                                             />
                                             Account
                                         </li>
-                                        <li style={{ cursor: "pointer" }}>
+                                        <li style={{ cursor: "pointer"  }} 
+                                        onClick={() => navigate("/help")}
+                                        >
                                             <img
                                                 src={helpIcon}
                                                 alt="Help"
                                                 style={{ width: "17px", float: "left", marginRight: "10px" }}
                                             />
-                                            Help Centre
+                                            Help Center
                                         </li>
                                         <li onClick={handleLogout} style={{ cursor: "pointer", textAlign: "center" }}>
                                             Logout

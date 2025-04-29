@@ -1266,7 +1266,7 @@ body {
   right: 20px;
   background-color: rgba(0, 0, 0, 0.8) !important;
   color: white;
-  border: 1px solid grey;
+  border-top: 1px solid white;
   width: 130px;
   font-size: 13px;
   padding: 5px;
@@ -1275,6 +1275,10 @@ body {
 .profile-dropdown ul {
   list-style: none;
   padding: 0;
+}
+
+p {
+  margin: 0 0 20px;
 }
 
 .profile-dropdown li {
