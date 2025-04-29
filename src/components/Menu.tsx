@@ -174,7 +174,7 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                                             />
                                             Manage Profile
                                         </li>
-                                        <li style={{ cursor: "pointer" }}>
+                                        <li style={{ cursor: "pointer" }}  onClick={() => navigate("/my-account")}>
                                             <img
                                                 src={accountIcon}
                                                 alt="Account"

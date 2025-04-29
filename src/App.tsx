@@ -14,6 +14,7 @@ import OtpPage from "./pages/OtpPage";
 import ProfilesPage from "./pages/ProfilePage";
 import BrowsePage from "./pages/BrowsePage";
 import Help from "./pages/Help";
+import MyAccount from "./pages/MyAccount";
 
 const App: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -40,6 +41,7 @@ const App: React.FC = () => {
                 <Route path="/browse" element={<BrowsePage />} />
                 <Route path='/profiles' element={<ProfilesPage />} />
                 <Route path="/help" element={<Help />} />
+                <Route path="/my-account" element={<MyAccount />} />
                 <Route path="/guest/movies/genre/:genreId" element={<MoviesPage searchQuery="" />} />
 
             </Routes>
