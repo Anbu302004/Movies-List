@@ -1,7 +1,7 @@
-import helpIcon from "../assets/help-white.png"; 
-import accountIcon from "../assets/account-white.png"; 
-import pencilIcon from "../assets/pencil-white.png"; 
-import notificationIcon from "../assets/notification-white.png"
+import helpIcon from "../assets/help-white.png";
+import accountIcon from "../assets/account-white.png";
+import pencilIcon from "../assets/pencil-white.png";
+import notificationIcon from "../assets/notification-white.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -129,19 +129,23 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                         onBlur={() => setIsFocused(false)}
                     />
                 </div>
+
                 {isLoggedIn ? (
                     <div>
                         <img
-                    src={notificationIcon}  
-                    className="notification-icon"
-                    style={{ width: "30px", height: "30px", padding: "5px",  }}
-                />
-                        <div className="profile-menu">
+                            src={notificationIcon}
+                            className="notification-icon"
+                            style={{ width: "30px", height: "30px", padding: "5px", cursor: "pointer" }}
+                        />
+                        <div
+                            className="profile-menu"
+                            onMouseEnter={() => setDropdownOpen(true)}
+                            onMouseLeave={() => setDropdownOpen(false)}
+                        >
                             <img
                                 src={profileIcon}
                                 alt="Profile"
                                 className="profile-icon"
-                                onClick={() => setDropdownOpen(!dropdownOpen)}
                                 style={{ cursor: "pointer", width: "38px", height: "38px", borderRadius: "3px" }}
                             />
                             {dropdownOpen && (
@@ -153,24 +157,39 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                                             className="profile-dropdown-icon"
                                             style={{ width: "35px", height: "35px" }}
                                         />
-                                        <span style={{  marginLeft: "20px" }}>
+                                        <span style={{ marginLeft: "20px" }}>
                                             {userName || "User"}
                                         </span>
                                     </div>
                                     <ul>
-                                        <li style={{ cursor: "pointer" }}>
-                                            <img src={pencilIcon} alt="Manage" style={{ width: "17px",float: "left", marginRight: "10px" }} />
+                                        <li
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => navigate("/browse")}
+                                        >
+                                            <img
+                                                src={pencilIcon}
+                                                alt="Manage"
+                                                style={{ width: "17px", float: "left", marginRight: "10px" }}
+                                            />
                                             Manage Profile
                                         </li>
                                         <li style={{ cursor: "pointer" }}>
-                                            <img src={accountIcon} alt="Account" style={{ width: "17px", float: "left", marginRight: "10px"  }} />
+                                            <img
+                                                src={accountIcon}
+                                                alt="Account"
+                                                style={{ width: "17px", float: "left", marginRight: "10px" }}
+                                            />
                                             Account
                                         </li>
                                         <li style={{ cursor: "pointer" }}>
-                                            <img src={helpIcon} alt="Help" style={{ width: "17px",float: "left", marginRight: "10px"  }} />
+                                            <img
+                                                src={helpIcon}
+                                                alt="Help"
+                                                style={{ width: "17px", float: "left", marginRight: "10px" }}
+                                            />
                                             Help Centre
                                         </li>
-                                        <li onClick={handleLogout} style={{ cursor: "pointer",textAlign: "center"}} >
+                                        <li onClick={handleLogout} style={{ cursor: "pointer", textAlign: "center" }}>
                                             Logout
                                         </li>
                                     </ul>
