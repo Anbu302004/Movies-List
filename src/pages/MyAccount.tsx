@@ -11,8 +11,8 @@ const MyAccount: React.FC = () => {
         <div style={{ backgroundColor: '#161616', color: '#fff', minHeight: '100vh', display: 'flex', }}>
         
           {/* Left Sidebar */}
-          <aside style={{ width: '260px', padding: '30px 20px', backgroundColor: '#161616',marginTop:"25px", marginLeft:"100px" }}>
-            <a href="/home" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px', }}>
+          <aside style={{ width: '260px', padding: '30px 20px', backgroundColor: '#161616',marginTop:"20px", marginLeft:"100px" }}>
+            <a href="/home" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px',paddingLeft:"30px" }}>
               ← Back to BESTCAST
             </a>
             <div style={{
@@ -64,18 +64,20 @@ const MyAccount: React.FC = () => {
                 </span>
                 <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>No Plan</h3>
                 <p style={{ margin: 0 }}>Current Membership expired.</p>
-                <button style={{
-                  backgroundColor: '#cc1e24',
-                  color: '#fff',
-                  padding: '10px 20px',
-                  border: 'none',
-                  marginTop: '15px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold'
-                }}>
-                  Choose Plan
-                </button>
-                <p style={{ marginTop: '15px', fontWeight: 'bold' }}>Manage Membership</p>
+                <a href="/pricing" style={{ textDecoration: 'none' }}>
+                    <button style={{
+                      backgroundColor: '#cc1e24',
+                      color: '#fff',
+                      padding: '10px 20px',
+                      border: 'none',
+                      marginTop: '15px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}>
+                      Choose Plan
+                    </button>
+                </a>
+                <p style={{ marginTop: '15px',cursor:"pointer"}}>Manage Membership</p>
               </div>
             </section>
             {/* Profile Section */}
