@@ -95,7 +95,8 @@ const Profile: React.FC = () => {
               width: '100%',
               border: 'none',
               fontWeight: 'bold',
-              marginTop: '10px'
+              marginTop: '10px',
+              cursor:"pointer"
             }}>Update</button>
           </div>
 
