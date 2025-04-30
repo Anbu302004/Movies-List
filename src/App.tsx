@@ -19,7 +19,7 @@ import BrowsePage from "./pages/BrowsePage";
 import Help from "./pages/Help";
 import Pricing from "./pages/Pricing";
 import MyAccount from "./pages/MyAccount";
-import membership from "./account/membership";
+import Profile from "./account/profile";
 import Membership from "./account/membership";
 
 // ✅ Protected route component
@@ -57,6 +57,7 @@ const App: React.FC = () => {
         <Route path="/my-account" element={<ProtectedRoute element={<MyAccount />} />} />
         <Route path="/pricing" element={<Pricing />} /> 
         <Route path="/account/membership" element={<Membership/>} />
+        <Route path="/account/profile" element={<Profile />} />
         <Route path="/guest/movies/genre/:genreId" element={<MoviesPage searchQuery="" />} />
       </Routes>
 

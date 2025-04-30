@@ -80,7 +80,7 @@ const Membership: React.FC = () => {
         {/* Main Content */}
         <main style={{ flex: 1, padding: '20px', marginBottom: "80px" }}>
           <h1 style={{ fontSize: '2rem', marginBottom: '30px' }}>Membership</h1>
-
+          <h4>Plan Details</h4>
           {/* Plan Details Box */}
           <div style={{
             backgroundColor: '#fff',
@@ -90,7 +90,6 @@ const Membership: React.FC = () => {
             width: "750px",
             marginBottom: '20px'
           }}>
-            <h4>Plan Details</h4>
             <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>No Plan</h3>
             <p style={{ margin: 0, paddingTop: "15px", paddingBottom: "10px" }}>Current Membership expired.</p>
             <Link to="/pricing" style={{ textDecoration: 'none' }}>
