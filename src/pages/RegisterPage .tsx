@@ -40,17 +40,9 @@ const RegisterPage: React.FC = () => {
       if (token) {
         Cookies.set("token", token, { expires: 7, path: "/" });
         localStorage.setItem("token", token);
-        if (userId) {
-          localStorage.setItem("user_id", userId);
-        }
-
-        try {
-          await moviesApiClient.get("/profile", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-        } catch (profileError) {
-          console.error("Profile fetch failed:", profileError);
-        }
+        localStorage.setItem("user_id", userId);
+        localStorage.setItem("user_name", cleanedName);
+        localStorage.setItem("user_phone", cleanedPhone);
 
         navigate("/otp", {
           state: {

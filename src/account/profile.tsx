@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const sidebarLinks = [
@@ -10,6 +10,16 @@ const sidebarLinks = [
 ];
 
 const Profile: React.FC = () => {
+  const [userName, setUserName] = useState('');
+  const [userPhone, setUserPhone] = useState('');
+
+  useEffect(() => {
+    const name = localStorage.getItem("user_name") || "";
+    const phone = localStorage.getItem("user_phone") || "";
+    setUserName(name);
+    setUserPhone(phone);
+  }, []);
+
   return (
     <div>
       <h1 style={{
@@ -55,13 +65,20 @@ const Profile: React.FC = () => {
           {/* Profile Form */}
           <div style={{ backgroundColor: '#fff', color: '#000', padding: '30px', borderRadius: '5px' }}>
             <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-              <input placeholder="Title" value="Ms." style={{ flex: 1 }} />
-              <input placeholder="First Name *" value="hhh" style={{ flex: 2 }} />
+            <select  style={{ flex: 1 }}>
+              <option value="">Select Title</option>
+              <option value="mr">Mr</option>
+              <option value="mrs">Mrs</option>
+              <option value="miss">Miss</option>
+              <option value="dr">Dr</option>
+              <option value="mx">Mx</option>
+            </select>
+              <input placeholder="First Name *" value={userName} style={{ flex: 2 }} />
               <input placeholder="Last Name" style={{ flex: 2 }} />
             </div>
 
             <p style={{ fontWeight: 'bold' }}>Mobile <span style={{ color: 'green', fontSize: '12px' }}>✔ VERIFIED</span></p>
-            <p style={{ marginBottom: '20px' }}>7000000001</p>
+            <p style={{ marginBottom: '20px' }}>{userPhone}</p>
 
             <input placeholder="Date of Birth *" style={{ width: '100%', marginBottom: '10px' }} />
             <select style={{ width: '100%', marginBottom: '20px' }}>
