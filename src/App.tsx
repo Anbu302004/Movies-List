@@ -19,6 +19,8 @@ import BrowsePage from "./pages/BrowsePage";
 import Help from "./pages/Help";
 import Pricing from "./pages/Pricing";
 import MyAccount from "./pages/MyAccount";
+import membership from "./account/membership";
+import Membership from "./account/membership";
 
 // ✅ Protected route component
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
@@ -54,6 +56,7 @@ const App: React.FC = () => {
         <Route path="/help" element={<Help />} />
         <Route path="/my-account" element={<ProtectedRoute element={<MyAccount />} />} />
         <Route path="/pricing" element={<Pricing />} /> 
+        <Route path="/account/membership" element={<Membership/>} />
         <Route path="/guest/movies/genre/:genreId" element={<MoviesPage searchQuery="" />} />
       </Routes>
 
