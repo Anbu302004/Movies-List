@@ -79,26 +79,26 @@ const Profile: React.FC = () => {
 
             <p style={{ fontWeight: 'bold' }}>Mobile <span style={{ color: 'green', fontSize: '12px' }}>✔ VERIFIED</span></p>
             <p style={{ marginBottom: '20px' }}>{userPhone}</p>
-
-            <input placeholder="Date of Birth *" style={{ width: '100%', marginBottom: '10px' }} />
+            Date of Birth 
+            <input placeholder="dd/mm/yyyy" style={{ width: '100%', marginBottom: '10px' }} />
             <select style={{ width: '100%', marginBottom: '20px' }}>
               <option>Select</option>
               <option>Male</option>
               <option>Female</option>
               <option>Other</option>
             </select>
-
-            <button style={{
+          </div>
+          <button style={{
               backgroundColor: '#cc1e24',
               color: '#fff',
-              padding: '10px',
+              padding: '12px',
+              borderRadius: '5px',
               width: '100%',
               border: 'none',
               fontWeight: 'bold',
               marginTop: '10px',
               cursor:"pointer"
             }}>Update</button>
-          </div>
 
           {/* Delete Account */}
           <h4 style={{ marginTop: '40px' }}>Permanent Account Removal</h4>
