@@ -56,8 +56,8 @@ const App: React.FC = () => {
         <Route path="/help" element={<Help />} />
         <Route path="/my-account" element={<ProtectedRoute element={<MyAccount />} />} />
         <Route path="/pricing" element={<Pricing />} /> 
-        <Route path="/account/membership" element={<Membership/>} />
-        <Route path="/account/profile" element={<Profile />} />
+        <Route path="/account/membership"  element={ <ProtectedRoute element={<Membership />}/> } /> 
+        <Route path="/account/profile"  element={ <ProtectedRoute element={<Profile />}/> } />
         <Route path="/guest/movies/genre/:genreId" element={<MoviesPage searchQuery="" />} />
       </Routes>
 
