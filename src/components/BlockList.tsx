@@ -35,9 +35,12 @@ interface BlockListProps {
 }
 
 const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
-  const { data: newReleases = [], isLoading: loadingNew, error: errorNew } = useBlockMovies("New Releases");
-  const { data: trendingMovies = [], isLoading: loadingTrending, error: errorTrending } = useBlockMovies("Trending Now");
-  const { data: comedyMovies = [], isLoading: loadingComedy, error: errorComedy } = useBlockMovies("Comedy Movies");
+  const { data: topten = [], isLoading: loadingNew, error: errorNew } = useBlockMovies("Top Ten Movies");
+  const { data: newmovies = [], isLoading: loadingTrending, error: errorTrending } = useBlockMovies("New Movie For You");
+  const { data: darkmovies = [], isLoading: loadingComedy, error: errorComedy } = useBlockMovies("Dark Movies");
+  const { data: kidmovies  = [], isLoading: loadingkids  , error: errorkids  } = useBlockMovies("Kids Movies");
+  const { data: romancemovies  = [], isLoading: loadingromance , error: errorromance   } = useBlockMovies("Romance Movies");
+
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
@@ -58,8 +61,8 @@ const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
   const filterMovies = (movies: Movie[]) =>
     filterIds ? movies.filter((movie) => filterIds.includes(movie.id)) : movies;
 
-  if (loadingNew || loadingTrending || loadingComedy) return <p>Loading...</p>;
-  if (errorNew || errorTrending || errorComedy) return <p>Error loading movies.</p>;
+  if (loadingNew || loadingTrending || loadingComedy || loadingkids || loadingromance) return <p>Loading...</p>;
+  if (errorNew || errorTrending || errorComedy ||errorkids || errorromance) return <p>Error loading movies.</p>;
 
   const renderMovies = (listTitle: string, movies: Movie[]) => {
     const filtered = filterMovies(movies);
@@ -150,9 +153,11 @@ const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
 
   return (
     <>
-      {renderMovies("New Releases", newReleases)}
-      {renderMovies("Trending Movies", trendingMovies)}
-      {renderMovies("Comedy Movies", comedyMovies)}
+      {renderMovies("Top Ten Movies", topten)}
+      {renderMovies("New Movie For You", newmovies)}
+      {renderMovies("Dark Movies", darkmovies)}
+      {renderMovies("Kid Movies", kidmovies)}
+      {renderMovies("Romance Movies", romancemovies)}
     </>
   );
 };
