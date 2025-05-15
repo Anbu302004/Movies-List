@@ -4,6 +4,8 @@ import useBlockMovies from "../hooks/useBlockMovies";
 import { IMAGE_BASE_URL } from "../services/moviesApiClient";
 import "../index.css";
 import { Volume2, VolumeX, X } from "lucide-react";
+import leftWhiteIcon from "../assets/left-white.png";
+import rightWhiteIcon from "../assets/right-white.png";
 import playIcon from "../assets/play.png";
 import plusIcon from "../assets/plus.png";
 import likeIcon from "../assets/like.png";
@@ -34,6 +36,8 @@ interface BlockListProps {
   filterIds?: string[];
 }
 
+const ITEMS_PER_PAGE = 5;
+
 const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
   const { data: topten = [], isLoading: loadingNew, error: errorNew } = useBlockMovies("Top Ten Movies");
   const { data: newmovies = [], isLoading: loadingTrending, error: errorTrending } = useBlockMovies("New Movie For You");
@@ -41,10 +45,12 @@ const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
   const { data: kidmovies  = [], isLoading: loadingkids  , error: errorkids  } = useBlockMovies("Kids Movies");
   const { data: romancemovies  = [], isLoading: loadingromance , error: errorromance   } = useBlockMovies("Romance Movies");
 
-
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [myList, setMyList] = useState<Movie[]>([]);
+
+  // Pagination state per list title
+  const [pageIndexes, setPageIndexes] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     const storedList = JSON.parse(localStorage.getItem("myList") || "[]");
@@ -62,17 +68,55 @@ const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
     filterIds ? movies.filter((movie) => filterIds.includes(movie.id)) : movies;
 
   if (loadingNew || loadingTrending || loadingComedy || loadingkids || loadingromance) return <p>Loading...</p>;
-  if (errorNew || errorTrending || errorComedy ||errorkids || errorromance) return <p>Error loading movies.</p>;
+  if (errorNew || errorTrending || errorComedy || errorkids || errorromance) return <p>Error loading movies.</p>;
+
+  const handlePrev = (listTitle: string) => {
+    setPageIndexes((prev) => ({
+      ...prev,
+      [listTitle]: Math.max((prev[listTitle] || 0) - 1, 0),
+    }));
+  };
+
+  const handleNext = (listTitle: string, maxPage: number) => {
+    setPageIndexes((prev) => ({
+      ...prev,
+      [listTitle]: Math.min((prev[listTitle] || 0) + 1, maxPage),
+    }));
+  };
 
   const renderMovies = (listTitle: string, movies: Movie[]) => {
     const filtered = filterMovies(movies);
     if (filtered.length === 0) return null;
 
+    // Current page index for this list
+    const currentPage = pageIndexes[listTitle] || 0;
+    const maxPage = Math.floor((filtered.length - 1) / ITEMS_PER_PAGE);
+    const paginatedMovies = filtered.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
+
+    // Hide pagination if movies count is 5 or less
+    const showPagination = filtered.length > ITEMS_PER_PAGE;
+
     return (
       <div className="popular-container">
         <h1 className="popular-heading">{listTitle}</h1>
+
+        {showPagination && (
+  <div
+    className="pagination-buttons"
+    style={{  
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}
+  >
+     
+  </div>
+)}
+
+
+
         <div className="movies-grid">
-          {filtered.map((movie, index) => {
+          {paginatedMovies.map((movie, index) => {
             const uniqueHoverId = `${listTitle}-${movie.id}-${index}`;
             const isHovered = hoveredId === uniqueHoverId;
 
@@ -245,21 +289,31 @@ const MoviePopup: React.FC<{
           </div>
         </div>
 
-        <div className="popup-details">
-          <div className="left-section">
-            <span className="badge">{movie.certificate}</span>
-            <span className="duration">{movie.duration_text}</span>
-            <h3>About {movie.title}</h3>
-            <p className="description">
-              {movie.content_plain || "No description available."}
-            </p>
-          </div>
-          <div className="right-section">
-            <p><strong>Genres:</strong> {movie.genres.map((g) => g.title).join(", ")}</p>
-            <p><strong>Director:</strong> {movie.director.map((d) => d.name).join(", ") || "Unknown"}</p>
-            <p><strong>Actors:</strong> {movie.actors.map((a) => a.name).join(", ") || "N/A"}</p>
-            <p><strong>Actresses:</strong> {movie.actresses.map((a) => a.name).join(", ") || "N/A"}</p>
-            <p><strong>Languages:</strong> {movie.languages.map((l) => l.title).join(", ")}</p>
+                 <div className="popup-details">
+          <h2>{movie.title}</h2>
+          <p>{movie.content_plain}</p>
+
+          <div className="popup-info">
+            <div>
+              <strong>Genres:</strong>{" "}
+              {movie.genres.map((genre) => genre.title).join(", ")}
+            </div>
+            <div>
+              <strong>Languages:</strong>{" "}
+              {movie.languages.map((lang) => lang.title).join(", ")}
+            </div>
+            <div>
+              <strong>Director:</strong>{" "}
+              {movie.director.map((d) => d.name).join(", ")}
+            </div>
+            <div>
+              <strong>Actors:</strong>{" "}
+              {movie.actors.map((a) => a.name).join(", ")}
+            </div>
+            <div>
+              <strong>Actresses:</strong>{" "}
+              {movie.actresses.map((a) => a.name).join(", ")}
+            </div>
           </div>
         </div>
       </div>
@@ -268,3 +322,4 @@ const MoviePopup: React.FC<{
 };
 
 export default BlockList;
+
