@@ -14,20 +14,17 @@ const Profile: React.FC = () => {
   const [userPhone, setUserPhone] = useState('');
 
   useEffect(() => {
-    const name = localStorage.getItem("user_name") || "";
-    const phone = localStorage.getItem("user_phone") || "";
-    setUserName(name);
-    setUserPhone(phone);
+    setUserName(localStorage.getItem("user_name") || "");
+    setUserPhone(localStorage.getItem("user_phone") || "");
   }, []);
 
   return (
     <div>
-      <h1 style={{
+      <div style={{
         padding: "70px",
         background: "#191919",
         color: "white",
-        marginTop: "-140px",
-        marginBottom: "0px",
+        marginTop: "-140px"
       }} />
 
       <div style={{ backgroundColor: '#161616', color: '#fff', minHeight: '100vh', display: 'flex' }}>
@@ -58,46 +55,63 @@ const Profile: React.FC = () => {
         </aside>
 
         {/* Main Content */}
-        <main style={{ flex: 1, padding: '20px', maxWidth: "800px" }}>
+        <main style={{ flex: 1, padding: '20px 40px', maxWidth: "800px" }}>
           <h1 style={{ fontSize: '2rem', marginBottom: '30px' }}>Profile</h1>
           <h4>Account Information</h4>
 
           {/* Profile Form */}
           <div style={{ backgroundColor: '#fff', color: '#000', padding: '30px', borderRadius: '5px' }}>
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-            <select  style={{ flex: 1 }}>
-              <option value="">Select Title</option>
-              <option value="mr">Mr</option>
-              <option value="mrs">Mrs</option>
-              <option value="miss">Miss</option>
-              <option value="dr">Dr</option>
-              <option value="mx">Mx</option>
-            </select>
-              <input placeholder="First Name *" value={userName} style={{ flex: 2 }} />
-              <input placeholder="Last Name" style={{ flex: 2 }} />
+            <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
+              <select style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}>
+                <option value="">Select Title</option>
+                <option value="mr">Mr</option>
+                <option value="mrs">Mrs</option>
+                <option value="miss">Miss</option>
+                <option value="dr">Dr</option>
+                <option value="mx">Mx</option>
+              </select>
+              <input
+                placeholder="First Name *"
+                value={userName}
+                style={{ flex: 2, padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}
+              />
+              <input
+                placeholder="Last Name"
+                style={{ flex: 2, padding: '10px', borderRadius: '5px', border: '1px solid #ccc' , backgroundColor: '#cfcece' }}
+              />
             </div>
 
-            <p style={{ fontWeight: 'bold' }}>Mobile <span style={{ color: 'green', fontSize: '12px' }}>✔ VERIFIED</span></p>
-            <p style={{ marginBottom: '20px' }}>{userPhone}</p>
-            Date of Birth 
-            <input placeholder="dd/mm/yyyy" style={{ width: '100%', marginBottom: '10px' }} />
-            <select style={{ width: '100%', marginBottom: '20px' }}>
-              <option>Select</option>
+            <div style={{ marginBottom: '20px' }}>
+              <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+                Mobile <span style={{ color: 'green', fontSize: '12px' }}>✔ VERIFIED</span>
+              </p>
+              <p style={{ margin: 0 }}>{userPhone}</p>
+            </div>
+
+            <input
+              placeholder="Date of Birth (dd/mm/yyyy)"
+              style={{ width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece', }}
+            />
+            <select
+              style={{ width: '100%', padding: '10px', marginBottom: '20px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}
+            >
+               <option value="">Select </option>
               <option>Male</option>
               <option>Female</option>
               <option>Other</option>
-            </select>
+            </select> 
           </div>
-          <button style={{
+           <button style={{
               backgroundColor: '#cc1e24',
               color: '#fff',
-              padding: '12px',
+              padding: '14px',
               borderRadius: '5px',
+              marginTop: '50px',
               width: '100%',
               border: 'none',
               fontWeight: 'bold',
-              marginTop: '10px',
-              cursor:"pointer"
+              cursor: "pointer",
+              fontSize: "16px"
             }}>Update</button>
 
           {/* Delete Account */}
@@ -110,10 +124,11 @@ const Profile: React.FC = () => {
             <button style={{
               backgroundColor: '#cc1e24',
               color: '#fff',
-              padding: '10px 20px',
+              padding: '12px 20px',
               border: 'none',
               cursor: 'pointer',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              borderRadius: '5px'
             }}>Delete Account</button>
           </div>
         </main>
