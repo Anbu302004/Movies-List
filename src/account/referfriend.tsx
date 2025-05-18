@@ -101,7 +101,7 @@ const ReferFriend: React.FC = () => {
             borderRadius: '6px',
             overflow: 'hidden',
             marginBottom: '20px',
-            maxWidth: '500px',
+            maxWidth: '400px',
           }}>
             <input
               type="text"
@@ -154,8 +154,8 @@ const ReferFriend: React.FC = () => {
             maxWidth: '700px',
             borderRadius: '6px',
           }}>
-            <p><strong>Available Credits:</strong> 0</p>
-            <p><strong>Credits Used:</strong> 0</p>
+            <p style={{ marginTop: '15px' }}><strong>Available Credits:</strong> 0 
+            <strong style={{ marginLeft: '30px' }}>Credits Used:</strong> 0</p>
           </div>
 
           <h2 style={{ marginTop: '40px' }}>How does it work?</h2>

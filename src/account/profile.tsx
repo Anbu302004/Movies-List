@@ -86,7 +86,7 @@ const Profile: React.FC = () => {
               <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>
                 Mobile <span style={{ color: 'green', fontSize: '12px' }}>✔ VERIFIED</span>
               </p>
-              <p style={{ margin: 0 }}>{userPhone}</p>
+              <h3 style={{ margin: 0, fontWeight: '100' }}>{userPhone}</h3>
             </div>
 
             <input
