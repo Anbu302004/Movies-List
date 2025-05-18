@@ -257,12 +257,11 @@ const MoviePopup: React.FC<{
   };
 
   return (
-    <div className="popup-overlay" onClick={onClose}>
+        <div className="popup-overlay" onClick={onClose}>
       <div className="popup-content scrollable-popup" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>
           <X size={24} />
         </button>
-
         <div className="popup-banner" onClick={handleImageClick}>
           {showTrailer && movie.trailer ? (
             <HlsVideo src={movie.trailer} />
@@ -271,49 +270,32 @@ const MoviePopup: React.FC<{
               src={`${IMAGE_BASE_URL}${movie.image}`}
               alt={movie.title}
               className="popup-image"
+              style={{ cursor: movie.trailer ? "pointer" : "default" }}
             />
           )}
           <div className="popup-banner-overlay">
             <div className="movie-actions">
               <div className="action-icons-center">
                 <img src={playIcon} alt="Play" className="action-icon" />
-                <img
-                  src={myList.some((m) => m.id === movie.id) ? tickIcon : plusIcon}
-                  alt="My List"
-                  className="action-icon"
-                  onClick={() => toggleMyList(movie)}
-                />
+                <img src={plusIcon} alt="Add to List" className="action-icon" />
                 <img src={likeIcon} alt="Like" className="action-icon" />
               </div>
             </div>
           </div>
         </div>
-
-                 <div className="popup-details">
-          <h2>{movie.title}</h2>
-          <p>{movie.content_plain}</p>
-
-          <div className="popup-info">
-            <div>
-              <strong>Genres:</strong>{" "}
-              {movie.genres.map((genre) => genre.title).join(", ")}
-            </div>
-            <div>
-              <strong>Languages:</strong>{" "}
-              {movie.languages.map((lang) => lang.title).join(", ")}
-            </div>
-            <div>
-              <strong>Director:</strong>{" "}
-              {movie.director.map((d) => d.name).join(", ")}
-            </div>
-            <div>
-              <strong>Actors:</strong>{" "}
-              {movie.actors.map((a) => a.name).join(", ")}
-            </div>
-            <div>
-              <strong>Actresses:</strong>{" "}
-              {movie.actresses.map((a) => a.name).join(", ")}
-            </div>
+        <div className="popup-details">
+          <div className="left-section">
+            <span className="badge">{movie.certificate}</span>
+            <span className="duration">{movie.duration_text}</span>
+            <h3>About {movie.title}</h3>
+            <p className="description">{movie.content_plain || "No description available."}</p>
+          </div>
+          <div className="right-section">
+            <p><strong>Genres:</strong> {movie.genres.map((g) => g.title).join(", ")}</p>
+            <p><strong>Director:</strong> {movie.director.map(d => d.name).join(", ") || "Unknown"}</p>
+            <p><strong>Actors:</strong> {movie.actors.map(a => a.name).join(", ") || "N/A"}</p>
+            <p><strong>Actresses:</strong> {movie.actresses.map(a => a.name).join(", ") || "N/A"}</p>
+            <p><strong>Languages:</strong> {movie.languages.map((l) => l.title).join(", ")}</p>
           </div>
         </div>
       </div>

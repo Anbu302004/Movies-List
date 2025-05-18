@@ -118,7 +118,7 @@ const MyAccount: React.FC = () => {
                   Choose Plan
                 </button>
               </Link>
-              <p style={{ marginTop: '15px', cursor: "pointer" }}>Manage Membership</p>
+              <p style={{ marginTop: '15px', cursor: "pointer" }} className='acc'>Manage Membership</p>
             </div>
           </section>
 
@@ -133,7 +133,7 @@ const MyAccount: React.FC = () => {
               width: "770px"
             }}>
               <p style={{ fontWeight: 'bold' }}>User</p>
-              <p style={{ cursor: "pointer" }}>Manage Account</p>
+              <p style={{ cursor: "pointer" }} className='acc'>Manage Account</p>
             </div>
           </section>
         </main>

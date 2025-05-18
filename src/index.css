@@ -24,6 +24,14 @@ body {
   padding-left: 50px;
 }
 
+.acc {
+  color: black;
+}
+
+.acc:hover {
+  color: #cc1e24;
+}
+
 .movies-grid {
   display: grid;
   grid-template-columns: repeat(5, 4fr);
