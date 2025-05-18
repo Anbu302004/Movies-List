@@ -101,7 +101,7 @@ const ReferFriend: React.FC = () => {
             borderRadius: '6px',
             overflow: 'hidden',
             marginBottom: '20px',
-            maxWidth: '700px',
+            maxWidth: '500px',
           }}>
             <input
               type="text"
