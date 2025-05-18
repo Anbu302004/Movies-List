@@ -61,8 +61,8 @@ const Membership: React.FC = () => {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {sidebarLinks.map(({ name, path }) => (
                 <li key={name} style={{
-                  padding: '10px 16px',
-                  borderBottom: '1px solid #eee'
+                  padding: '10px 16px', 
+                  backgroundColor: '#f7f7f7',
                 }}>
                   <Link to={path} style={{
                     textDecoration: 'none',
