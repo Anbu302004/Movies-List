@@ -47,12 +47,12 @@ useEffect(() => {
                 <h2 className="price">₹{plan.price}</h2>
                 <p>{plan.duration}</p>
                <ul>
-  <li><img src={tickBullet}   className="bullet-icon" /> Video Quality: {plan.video_quality_text}</li>
-  <li><img src={tickBullet}  className="bullet-icon" /> Video Resolution: {plan.video_resolution_text}</li>
-  <li><img src={tickBullet}  className="bullet-icon" /> Supported Devices: {plan.video_device_text}</li>
-  <li><img src={tickBullet}   className="bullet-icon" /> Devices to watch limit: {plan.device_limit}</li>
-  <li><img src={tickBullet}  className="bullet-icon" /> Ads free movies and shows</li>
-</ul>
+                <li><img src={tickBullet}   className="bullet-icon" /> Video Quality: {plan.video_quality_text}</li>
+                <li><img src={tickBullet}  className="bullet-icon" /> Video Resolution: {plan.video_resolution_text}</li>
+                <li><img src={tickBullet}  className="bullet-icon" /> Supported Devices: {plan.video_device_text}</li>
+                <li><img src={tickBullet}   className="bullet-icon" /> Devices to watch limit: {plan.device_limit}</li>
+                <li><img src={tickBullet}  className="bullet-icon" /> Ads free movies and shows</li>
+              </ul>
 
                 <button className="buy-button">Buy This Plan</button>
               </div>
