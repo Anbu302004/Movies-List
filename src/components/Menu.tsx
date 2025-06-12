@@ -1,213 +1,208 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import useMenu from "../hooks/useMenu";
+
+import logo from "../assets/logo.png";
+import searchWhite from "../assets/search-white.png";
+import searchActive from "../assets/search.png";
 import helpIcon from "../assets/help-white.png";
 import accountIcon from "../assets/account-white.png";
 import pencilIcon from "../assets/pencil-white.png";
 import notificationIcon from "../assets/notification-white.png";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import useMenu from "../hooks/useMenu";
-import logo from "../assets/logo.png";
-import searchWhite from "../assets/search-white.png";
-import searchActive from "../assets/search.png";
+import profileIcon from "../assets/profile-1.jpg";
+
 import { FiMenu, FiX } from "react-icons/fi";
 import "../index.css";
-import profileIcon from "../assets/profile-1.jpg";
-import { Link } from "react-router-dom";
 
 const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) => {
-    const { data: menuItems, isLoading, error } = useMenu();
-    const [searchQuery, setSearchQuery] = useState("");
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState<string | undefined>(undefined);
-    const [userName, setUserName] = useState<string | undefined>(undefined);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const navigate = useNavigate();
+  const { data: menuItems, isLoading, error } = useMenu();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState<string | undefined>(undefined);
+  const [userName, setUserName] = useState<string>("User");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const checkToken = () => {
-            const tokenFromCookie = Cookies.get("token");
-            if (tokenFromCookie !== token) {
-                setToken(tokenFromCookie);
-                setIsLoggedIn(!!tokenFromCookie);
+  useEffect(() => {
+    const checkToken = () => {
+      const tokenFromCookie = Cookies.get("token");
+      if (tokenFromCookie !== token) {
+        setToken(tokenFromCookie);
+        setIsLoggedIn(!!tokenFromCookie);
 
-                if (tokenFromCookie) {
-                    const userNameFromCookie = Cookies.get("userName");
-                    setUserName(userNameFromCookie);
-                }
-            }
-        };
-
-        checkToken();
-        const interval = setInterval(checkToken, 1000);
-
-        return () => clearInterval(interval);
-    }, [token]);
-
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-    };
-
-    const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && searchQuery.trim()) {
-            const encodedQuery = encodeURIComponent(searchQuery.trim());
-            navigate(`/guest/search?search=${encodedQuery}`);
-            if (onSearch) onSearch(searchQuery.trim());
+        if (tokenFromCookie) {
+          // Get user name from localStorage
+          const userNameFromStorage = localStorage.getItem("user_name");
+          setUserName(userNameFromStorage || "User");
         }
+      }
     };
 
-    const handleLogoClick = () => {
-        navigate("/");
-        window.location.reload();
-    };
+    checkToken();
+    const interval = setInterval(checkToken, 1000);
+    return () => clearInterval(interval);
+  }, [token]);
 
-    const handleMenuClick = (path: string) => {
-        setIsMenuOpen(false);
-        navigate(path);
-        window.location.reload();
-    };
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
-    const handleLogout = () => {
-        Cookies.remove("token");
-        Cookies.remove("userName");
-        setIsLoggedIn(false);
-        setToken(undefined);
-        setUserName(undefined);
-        navigate("/login");
-    };
+  const handleSearchSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      const encodedQuery = encodeURIComponent(searchQuery.trim());
+      navigate(`/guest/search?search=${encodedQuery}`);
+      if (onSearch) onSearch(searchQuery.trim());
+    }
+  };
 
-    return (
-        <nav className="menu-container">
-            <div className="menu-content">
-                <img
-                    src={logo}
-                    alt="Logo"
-                    className="menu-logo"
-                    onClick={handleLogoClick}
-                    style={{ cursor: "pointer" }}
-                />
+  const handleLogoClick = () => {
+    navigate("/");
+    window.location.reload();
+  };
 
-                <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? <FiX size={24} color="white" /> : <FiMenu size={24} color="white" />}
-                </button>
+  const handleMenuClick = (path: string) => {
+    setIsMenuOpen(false);
+    navigate(path);
+    window.location.reload();
+  };
 
-                <ul className={`menu-list ${isMenuOpen ? "open" : ""}`}>
-                    {isLoading ? (
-                        <p>Loading menu...</p>
-                    ) : error ? (
-                        <p>Error: {error.message}</p>
-                    ) : (
-                        menuItems?.map((item) => (
-                            <li key={item.id} className="menu-item">
-                                <span
-                                    onClick={() =>
-                                        handleMenuClick(`/${item.name.toLowerCase().replace(/\s+/g, "")}`)
-                                    }
-                                    style={{ cursor: "pointer", color: "white", textDecoration: "none" }}
-                                >
-                                    {item.name}
-                                </span>
-                            </li>
-                        ))
-                    )}
-                </ul>
+  const handleLogout = () => {
+    Cookies.remove("token");
+    setIsLoggedIn(false);
+    setToken(undefined);
+    setUserName("User");
+    navigate("/login");
+  };
 
-                <div className={`search-container ${isFocused ? "focused" : ""}`}>
+  return (
+    <nav className="menu-container">
+      <div className="menu-content">
+        <img
+          src={logo}
+          alt="Logo"
+          className="menu-logo"
+          onClick={handleLogoClick}
+          style={{ cursor: "pointer" }}
+        />
+
+        <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {isMenuOpen ? <FiX size={24} color="white" /> : <FiMenu size={24} color="white" />}
+        </button>
+
+        <ul className={`menu-list ${isMenuOpen ? "open" : ""}`}>
+          {isLoading ? (
+            <p>Loading menu...</p>
+          ) : error ? (
+            <p>Error: {error.message}</p>
+          ) : (
+            menuItems?.map((item) => (
+              <li key={item.id} className="menu-item">
+                <span
+                  onClick={() =>
+                    handleMenuClick(`/${item.name.toLowerCase().replace(/\s+/g, "")}`)
+                  }
+                  style={{ cursor: "pointer", color: "white", textDecoration: "none" }}
+                >
+                  {item.name}
+                </span>
+              </li>
+            ))
+          )}
+        </ul>
+
+        <div className={`search-container ${isFocused ? "focused" : ""}`}>
+          <img
+            src={isFocused ? searchActive : searchWhite}
+            alt="Search Icon"
+            className="search-input-icon"
+          />
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchSubmit}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+          />
+        </div>
+
+        {isLoggedIn ? (
+          <div>
+            <img
+              src={notificationIcon}
+              className="notification-icon"
+              style={{ width: "25px", height: "25px", padding: "5px", cursor: "pointer" }}
+            />
+            <div
+              className="profile-menu"
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
+            >
+              <img
+                src={profileIcon}
+                alt="Profile"
+                className="profile-icon"
+                style={{ cursor: "pointer", width: "38px", height: "38px", borderRadius: "3px" }}
+              />
+              {dropdownOpen && (
+                <div className="profile-dropdown">
+                  <div className="profile-info">
                     <img
-                        src={isFocused ? searchActive : searchWhite}
-                        alt="Search Icon"
-                        className="search-input-icon"
+                      src={profileIcon}
+                      alt="Profile"
+                      className="profile-dropdown-icon"
+                      style={{ width: "35px", height: "35px" }}
                     />
-                    <input
-                        type="text"
-                        className="search-bar"
-                        placeholder="Search..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        onKeyDown={handleSearchSubmit}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                    />
+                    <span style={{ marginLeft: "20px" }}>
+                      {userName}
+                    </span>
+                  </div>
+                  <ul style={{ textDecoration: "none" }}>
+                    <li style={{ cursor: "pointer" }} onClick={() => navigate("/browse")}>
+                      <img
+                        src={pencilIcon}
+                        alt="Manage"
+                        style={{ width: "17px", float: "left", marginRight: "10px" }}
+                      />
+                      Manage Profile
+                    </li>
+                    <li style={{ cursor: "pointer" }} onClick={() => navigate("/my-account")}>
+                      <img
+                        src={accountIcon}
+                        alt="Account"
+                        style={{ width: "17px", float: "left", marginRight: "10px" }}
+                      />
+                      Account
+                    </li>
+                    <li style={{ cursor: "pointer" }} onClick={() => navigate("/help")}>
+                      <img
+                        src={helpIcon}
+                        alt="Help"
+                        style={{ width: "17px", float: "left", marginRight: "10px" }}
+                      />
+                      Help Center
+                    </li>
+                    <li onClick={handleLogout} style={{ cursor: "pointer", textAlign: "center" }}>
+                      Logout
+                    </li>
+                  </ul>
                 </div>
-
-                {isLoggedIn ? (
-                    <div>
-                        <img
-                            src={notificationIcon}
-                            className="notification-icon"
-                            style={{ width: "25px", height: "25px", padding: "5px", cursor: "pointer" }}
-                        />
-                        <div
-                            className="profile-menu"
-                            onMouseEnter={() => setDropdownOpen(true)}
-                            onMouseLeave={() => setDropdownOpen(false)}
-                        >
-                            <img
-                                src={profileIcon}
-                                alt="Profile"
-                                className="profile-icon"
-                                style={{ cursor: "pointer", width: "38px", height: "38px", borderRadius: "3px" }}
-                            />
-                            {dropdownOpen && (
-                                <div className="profile-dropdown">
-                                    <div className="profile-info">
-                                        <img
-                                            src={profileIcon}
-                                            alt="Profile"
-                                            className="profile-dropdown-icon"
-                                            style={{ width: "35px", height: "35px" }}
-                                        />
-                                        <span style={{ marginLeft: "20px" }}>
-                                            {userName || "User"}
-                                        </span>
-                                    </div>
-                                    <ul style={{textDecoration: "none"}}>
-                                        <li
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => navigate("/browse")}
-                                        >
-                                            <img
-                                                src={pencilIcon}
-                                                alt="Manage"
-                                                style={{ width: "17px", float: "left", marginRight: "10px" }}
-                                            />
-                                            Manage Profile
-                                        </li>
-                                        <li style={{ cursor: "pointer" }}  onClick={() => navigate("/my-account")}>
-                                            <img
-                                                src={accountIcon}
-                                                alt="Account"
-                                                style={{ width: "17px", float: "left", marginRight: "10px" }}
-                                            />
-                                            Account
-                                        </li>
-                                        <li style={{ cursor: "pointer"  }} 
-                                        onClick={() => navigate("/help")}
-                                        >
-                                            <img
-                                                src={helpIcon}
-                                                alt="Help"
-                                                style={{ width: "17px", float: "left", marginRight: "10px" }}
-                                            />
-                                            Help Center
-                                        </li>
-                                        <li onClick={handleLogout} style={{ cursor: "pointer", textAlign: "center" }}>
-                                            Logout
-                                        </li>
-                                    </ul>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                ) : (
-                    <button className="login-button" onClick={() => navigate("/login")}>
-                        Login
-                    </button>
-                )}
+              )}
             </div>
-        </nav>
-    );
+          </div>
+        ) : (
+          <button className="login-button" onClick={() => navigate("/login")}>
+            Login
+          </button>
+        )}
+      </div>
+    </nav>
+  );
 };
 
 export default Menu;
