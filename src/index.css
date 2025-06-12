@@ -1395,7 +1395,6 @@ p {
 }
 
 .plan-card ul li::before {
-  content: "✔";
   color: #f74f01;
   margin-right: 4px;
   border: 0.1px solid #f74f01;

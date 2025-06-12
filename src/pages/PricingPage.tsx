@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getSubscriptionPlans } from "../services/subscriptionService";
 import { SubscriptionPlan } from "../hooks/subscriptionplan";
+import tickBullet from "../assets/bullet-round-tick.png"
 
 const PricingPage: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
@@ -45,13 +46,14 @@ useEffect(() => {
                 <h3>{plan.name}</h3>
                 <h2 className="price">₹{plan.price}</h2>
                 <p>{plan.duration}</p>
-                <ul>
-                  <li>Video Quality: {plan.video_quality_text}</li>
-                  <li>Video Resolution: {plan.video_resolution_text}</li>
-                  <li>Supported devices: {plan.video_device_text}</li>
-                  <li>Devices to watch limit: {plan.device_limit}</li>
-                  <li>Ads free movies and shows</li>
-                </ul>
+               <ul>
+  <li><img src={tickBullet}   className="bullet-icon" /> Video Quality: {plan.video_quality_text}</li>
+  <li><img src={tickBullet}  className="bullet-icon" /> Video Resolution: {plan.video_resolution_text}</li>
+  <li><img src={tickBullet}  className="bullet-icon" /> Supported Devices: {plan.video_device_text}</li>
+  <li><img src={tickBullet}   className="bullet-icon" /> Devices to watch limit: {plan.device_limit}</li>
+  <li><img src={tickBullet}  className="bullet-icon" /> Ads free movies and shows</li>
+</ul>
+
                 <button className="buy-button">Buy This Plan</button>
               </div>
             ))}
