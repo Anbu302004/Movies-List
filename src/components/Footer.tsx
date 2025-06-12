@@ -42,7 +42,7 @@ const Footer = () => {
             <h4>Pages</h4>
             <ul>
               <li><Link to="/home">Home</Link></li>
-              <li><Link to="/price">Pricing</Link></li>
+              <li><Link to="/pricing">Pricing</Link></li>
             </ul>
           </div>
 

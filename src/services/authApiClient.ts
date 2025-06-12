@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE_URL = "https://movies.harikaran.com/api";
+export const API_BASE_URL = "/api";
 export const IMAGE_BASE_URL = "https://movies.harikaran.com/";
 
 const moviesApiClient = axios.create({

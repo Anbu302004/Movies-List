@@ -17,7 +17,7 @@ import OtpPage from "./pages/OtpPage";
 import ProfilesPage from "./pages/ProfilePage";
 import BrowsePage from "./pages/BrowsePage";
 import Help from "./pages/Help";
-import Pricing from "./pages/Pricing";
+import PricingPage from "./pages/PricingPage";
 import MyAccount from "./pages/MyAccount";
 import Profile from "./account/profile";
 import Membership from "./account/membership";
@@ -56,7 +56,7 @@ const App: React.FC = () => {
         <Route path="/profiles" element={<ProfilesPage />} />
         <Route path="/help" element={<Help />} />
         <Route path="/my-account" element={<ProtectedRoute element={<MyAccount />} />} />
-        <Route path="/pricing" element={<Pricing />} /> 
+        <Route path="/pricing" element={<PricingPage />} /> 
         <Route path="/account/membership"  element={ <ProtectedRoute element={<Membership />}/> } /> 
         <Route path="/account/profile"  element={ <ProtectedRoute element={<Profile />}/> } />
         <Route path="/account/referfriend"  element={ <ProtectedRoute element={<ReferFriend />}/> } />
