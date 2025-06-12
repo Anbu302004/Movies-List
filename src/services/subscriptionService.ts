@@ -2,12 +2,23 @@ import moviesApiClient from "./authApiClient";
 import { SubscriptionPlan } from "../hooks/subscriptionplan";
 
 export const getSubscriptionPlans = async (
-    sessionToken: string
+    sessionToken?: string
 ): Promise<SubscriptionPlan[]> => {
-    const response = await moviesApiClient.get("/subscriptionlist", {
-        headers: {
-            Authorization: `Bearer ${sessionToken}`,
-        },
-    });
-    return response.data.data;
+    try {
+        const response = await moviesApiClient.get("/subscriptionlist", {
+            headers: sessionToken
+                ? { Authorization: `Bearer ${sessionToken}` }
+                : {},
+        });
+
+        if (response.data?.data) {
+            return response.data.data;
+        } else {
+            console.warn("Unexpected response structure", response.data);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching subscription plans:", error);
+        return [];
+    }
 };

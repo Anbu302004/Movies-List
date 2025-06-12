@@ -1303,28 +1303,66 @@ p {
 }
 
 .pricing-container {
-  padding: 40px 20px;
+  padding: 60px 20px;
   color: white;
   background-color: #111;
   text-align: center;
   font-family: Arial, sans-serif;
 }
 
+.pricing-container h1 {
+  font-size: 51px;
+  margin-bottom: 100px;
+}
+
 .plans-grid {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
   margin-top: 30px;
+  margin-left: 120px;
+}
+
+.notetext {
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.notetext a {
+  color: #e50914;
+  text-decoration: none;
+}
+
+.section-title p {
+  margin: 0 0 20px;
+}
+
+.section-title .pre-title {
+  font-weight: 600;
+  font-size: 20px;
+  color: #e50914;
+  line-height: 2.5;
+}
+
+.align-section {
+  text-align: left;
+  margin-left: 120px;
+}
+
+.note {
+  margin-left: 120px;
+  margin-top: 15px;
 }
 
 .plan-card {
   position: relative;
   background: #fff;
   color: #000;
-  padding: 24px 16px;
+  padding: 60px 20px;
   border-radius: 8px;
-  width: 200px;
+  width: 240px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
   flex-direction: column;
   align-items: center;
@@ -1359,11 +1397,6 @@ p {
   justify-content: center;
   gap: 6px;
   margin-bottom: 14px;
-}
-
-.price {
-  color: #b20710;
-  font-size: 35px;
 }
 
 .before-price {
@@ -1412,4 +1445,59 @@ p {
 
 .buy-button:hover {
   background: #e50914;
+}
+
+.yearly-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  /* space between elements */
+  margin-bottom: 14px;
+}
+
+.yearly-price h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.yearly-price .price {
+  font-size: 45px;
+  color: #cc1e24;
+  font-weight: bold;
+}
+
+
+
+.amount-strike {
+  color: #f1b9b9;
+  font-size: 21px;
+  font-weight: 400;
+  text-decoration: line-through;
+  margin-right: 10px;
+}
+
+.duration {
+  margin-left: -10px;
+  color: #cc1e24;
+  font-weight: 100;
+}
+
+.ribbon {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  /* Aligns to the right */
+  background-color: #FFC107;
+  color: #000;
+  padding: 5px 25px 5px 20px;
+  font-size: 12.5px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+  /* V-cut on left */
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }

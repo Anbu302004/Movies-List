@@ -11,4 +11,7 @@ export interface SubscriptionPlan {
     video_device_text: string;
     device_limit: number;
     ads_free: boolean;
+    duration_text: string;
+    before_price: number;
+    tagtext?: string;
 }
