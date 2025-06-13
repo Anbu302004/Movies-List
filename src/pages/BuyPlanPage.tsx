@@ -50,7 +50,7 @@ const BuyPlanPage: React.FC = () => {
             theme: { color: razorpay.color },
             modal: {
               ondismiss: () => {
-                navigate("/pricing");
+                window.location.href = "/pricing";
               },
             },
           };
@@ -70,14 +70,13 @@ const BuyPlanPage: React.FC = () => {
 
   return (
     <div className="payment-container" style={{ textAlign: "center", padding: "40px", background: "#111", color: "#fff" }}>
-      <img src={gateway.logo} alt="Logo" style={{ height: 50, marginBottom: 20 }} />
-      <h2>{gateway.title}</h2>
+      <h2 style={{ marginBottom: "20px",fontSize:"50px" }}>{gateway.title}</h2>
       <div
         className="payment-content"
         dangerouslySetInnerHTML={{ __html: gateway.content }}
       />
       <button
-        onClick={() => navigate("/pricing")}
+        onClick={() => window.location.href = "/pricing"}
         style={{
           marginTop: 20,
           background: "#555",
