@@ -3,7 +3,7 @@ import { getSubscriptionPlans } from "../services/subscriptionService";
 import { SubscriptionPlan } from "../hooks/subscriptionplan";
 import tickBullet from "../assets/bullet-round-tick.png";
 import { useNavigate } from "react-router-dom";
-import moviesApiClient from "../services/authApiClient"; 
+import moviesApiClient from "../services/authApiClient";
 
 const PricingPage: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
@@ -14,7 +14,7 @@ const PricingPage: React.FC = () => {
     const fetchPlans = async () => {
       const token =
         localStorage.getItem("token") ||
-        "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002";  
+        "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002";
       const data = await getSubscriptionPlans(token);
       setPlans(data);
       setLoading(false);
@@ -83,16 +83,16 @@ const PricingPage: React.FC = () => {
                   </li>
                 </ul>
 
-                 <button
-              className="buy-button"
-              onClick={() =>
-                navigate(`/buyplan/${plan.id}`, {
-                  state: { selectedPlan: plan }, // 👈 pass plan data
-                })
-              }
-            >
-              Buy This Plan
-            </button>
+                <button
+                  className="buy-button"
+                  onClick={() =>
+                    navigate(`/buyplan/${plan.id}`, {
+                      state: { selectedPlan: plan },
+                    })
+                  }
+                >
+                  Buy This Plan
+                </button>
               </div>
             ))
           ) : (

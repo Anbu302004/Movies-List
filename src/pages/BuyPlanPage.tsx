@@ -36,6 +36,15 @@ const BuyPlanPage: React.FC = () => {
 
         setGateway(razorpay);
 
+        // Step 1: Create subscription before opening payment popup
+        const subscriptionRes = await moviesApiClient.post(`/createsubscription/${selectedPlan.id}`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const orderId = subscriptionRes.data?.results?.razorpay_order_id;
+        console.log("📦 Created orderId:", orderId);
+
+        
         setTimeout(() => {
           const options = {
             key: razorpay.key,
@@ -44,9 +53,38 @@ const BuyPlanPage: React.FC = () => {
             name: razorpay.name,
             description: razorpay.title,
             image: razorpay.logo,
-            handler: function (response: any) {
-              alert("Payment successful: " + response.razorpay_payment_id);
-            },
+            order_id: orderId,
+handler: async function (response: any) {
+  console.log("🧾 Payment Success");
+  console.log("plan_id:", selectedPlan.id);
+  console.log("order_id:", orderId);
+  console.log("razorpay_payment_id:", response.razorpay_payment_id);
+  console.log("razorpay_signature:", response.razorpay_signature); // ✅ Add this log
+
+  try {
+    const updateRes = await moviesApiClient.post("/updatetransaction", {
+      plan_id: selectedPlan.id,
+      order_id: orderId,
+      razorpay_payment_id: response.razorpay_payment_id,
+      razorpay_signature: response.razorpay_signature, // ✅ Make sure this is included
+    }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    console.log("✅ Update Response:", updateRes.data);
+
+    const verifyRes = await moviesApiClient.post(`/verifypaymentstatus?oid=${orderId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    console.log("🔍 Verification Response:", verifyRes.data);
+
+    window.location.href = "/pricing";
+  } catch (err) {
+    console.error("❌ Verify Payment Error", err); 
+  }
+},
+
             theme: { color: razorpay.color },
             modal: {
               ondismiss: () => {
@@ -59,7 +97,7 @@ const BuyPlanPage: React.FC = () => {
           rzp.open();
         }, 1000);
       } catch (err) {
-        console.error("Failed to load payment info", err);
+        console.error("Failed to load payment info or create subscription", err);
       }
     };
 
@@ -70,7 +108,7 @@ const BuyPlanPage: React.FC = () => {
 
   return (
     <div className="payment-container" style={{ textAlign: "center", padding: "40px", background: "#111", color: "#fff" }}>
-      <h2 style={{ marginBottom: "20px",fontSize:"50px" }}>{gateway.title}</h2>
+      <h2 style={{ marginBottom: "20px", fontSize: "50px" }}>{gateway.title}</h2>
       <div
         className="payment-content"
         dangerouslySetInnerHTML={{ __html: gateway.content }}
