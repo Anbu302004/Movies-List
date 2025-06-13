@@ -23,6 +23,7 @@ import Profile from "./account/profile";
 import Membership from "./account/membership";
 import ReferFriend from "./account/referfriend";
 import BuyPlanPage from "./pages/BuyPlanPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 
 // ✅ Protected route component
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
@@ -59,6 +60,7 @@ const App: React.FC = () => {
         <Route path="/my-account" element={<ProtectedRoute element={<MyAccount />} />} />
         <Route path="/pricing" element={<PricingPage />} /> 
         <Route path="/buyplan/:planId" element={<ProtectedRoute element={<BuyPlanPage />} />} />
+        <Route path="/payment-success" element={<ProtectedRoute element={<PaymentSuccessPage />} />} />
         <Route path="/account/membership"  element={ <ProtectedRoute element={<Membership />}/> } /> 
         <Route path="/account/profile"  element={ <ProtectedRoute element={<Profile />}/> } />
         <Route path="/account/referfriend"  element={ <ProtectedRoute element={<ReferFriend />}/> } />
