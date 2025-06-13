@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import moviesApiClient from "../services/authApiClient";
 
 const BuyPlanPage: React.FC = () => {
-  const { id } = useParams(); // plan ID from URL
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const selectedPlan = location.state?.selectedPlan;
   const [gateway, setGateway] = useState<any>(null);
 
   useEffect(() => {
     const fetchPaymentInfo = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        window.location.href = "/login";
+        navigate("/login");
+        return;
+      }
+
+      if (!selectedPlan) {
+        alert("Invalid plan data. Please select again.");
+        navigate("/pricing");
         return;
       }
 
@@ -20,7 +29,6 @@ const BuyPlanPage: React.FC = () => {
         });
 
         const razorpay = res.data?.results?.razorpay;
-
         if (!razorpay || !razorpay.enabled) {
           alert("Payment is currently unavailable.");
           return;
@@ -29,10 +37,9 @@ const BuyPlanPage: React.FC = () => {
         setGateway(razorpay);
 
         setTimeout(() => {
-          const amount = getPlanAmount(Number(id));
           const options = {
             key: razorpay.key,
-            amount: amount * 100, // in paise
+            amount: selectedPlan.price * 100, // ₹ to paise
             currency: "INR",
             name: razorpay.name,
             description: razorpay.title,
@@ -43,7 +50,7 @@ const BuyPlanPage: React.FC = () => {
             theme: { color: razorpay.color },
             modal: {
               ondismiss: () => {
-                window.location.href = "/pricing"; // 🔁 Full refresh redirect
+                navigate("/pricing");
               },
             },
           };
@@ -57,21 +64,12 @@ const BuyPlanPage: React.FC = () => {
     };
 
     fetchPaymentInfo();
-  }, [id]);
-
-  const getPlanAmount = (planId: number): number => {
-    switch (planId) {
-      case 1: return 45;
-      case 2: return 399;
-      case 3: return 899;
-      default: return 100;
-    }
-  };
+  }, [id, selectedPlan, navigate]);
 
   if (!gateway) return <p>Loading payment details...</p>;
 
   return (
-    <div className="payment-container" style={{ textAlign: "center", padding: "40px" }}>
+    <div className="payment-container" style={{ textAlign: "center", padding: "40px", background: "#111", color: "#fff" }}>
       <img src={gateway.logo} alt="Logo" style={{ height: 50, marginBottom: 20 }} />
       <h2>{gateway.title}</h2>
       <div
@@ -79,7 +77,7 @@ const BuyPlanPage: React.FC = () => {
         dangerouslySetInnerHTML={{ __html: gateway.content }}
       />
       <button
-        onClick={() => window.location.href = "/pricing"}
+        onClick={() => navigate("/pricing")}
         style={{
           marginTop: 20,
           background: "#555",

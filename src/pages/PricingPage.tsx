@@ -23,57 +23,6 @@ const PricingPage: React.FC = () => {
     fetchPlans();
   }, []);
 
-const handleBuyPlan = async (planId: number) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-
-  // Find selected plan
-  const selectedPlan = plans.find((p) => p.id === planId);
-  if (!selectedPlan) {
-    alert("Invalid plan selected.");
-    return;
-  }
-
-  try {
-    const res = await moviesApiClient.get("/paymentgatewayinfo", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const razorpay = res.data?.results?.razorpay;
-
-    if (!razorpay || !razorpay.enabled) {
-      alert("Payment is currently unavailable.");
-      return;
-    }
-
-    const options = {
-      key: razorpay.key,
-      amount: selectedPlan.price * 100, // convert ₹ to paise
-      currency: "INR",
-      name: razorpay.name,
-      description: razorpay.title,
-      image: razorpay.logo,
-      handler: function (response: any) {
-        alert("Payment successful: " + response.razorpay_payment_id);
-      },
-      theme: {
-        color: razorpay.color,
-      },
-    };
-
-    const rzp = new (window as any).Razorpay(options);
-    rzp.open();
-  } catch (err) {
-    console.error("Error during payment:", err);
-  }
-};
-
   if (loading) return <p style={{ color: "#fff" }}>Loading...</p>;
 
   return (
@@ -134,10 +83,16 @@ const handleBuyPlan = async (planId: number) => {
                   </li>
                 </ul>
 
-                <button className="buy-button" onClick={() => navigate(`/buyplan/${plan.id}`)}>
-                  Buy This Plan
-                </button>
-
+                 <button
+              className="buy-button"
+              onClick={() =>
+                navigate(`/buyplan/${plan.id}`, {
+                  state: { selectedPlan: plan }, // 👈 pass plan data
+                })
+              }
+            >
+              Buy This Plan
+            </button>
               </div>
             ))
           ) : (
