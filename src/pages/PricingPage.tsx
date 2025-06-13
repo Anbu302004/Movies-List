@@ -3,6 +3,7 @@ import { getSubscriptionPlans } from "../services/subscriptionService";
 import { SubscriptionPlan } from "../hooks/subscriptionplan";
 import tickBullet from "../assets/bullet-round-tick.png";
 import { useNavigate } from "react-router-dom";
+import moviesApiClient from "../services/authApiClient"; // ← Make sure this is correct
 
 const PricingPage: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
@@ -11,7 +12,9 @@ const PricingPage: React.FC = () => {
 
   useEffect(() => {
     const fetchPlans = async () => {
-      const token = localStorage.getItem("token") || "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002"; // fallback to public token
+      const token =
+        localStorage.getItem("token") ||
+        "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002"; // fallback to public token
       const data = await getSubscriptionPlans(token);
       setPlans(data);
       setLoading(false);
@@ -20,18 +23,56 @@ const PricingPage: React.FC = () => {
     fetchPlans();
   }, []);
 
-  const handleBuyClick = (planId: number) => {
+const handleBuyPlan = async (planId: number) => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    // Redirect to login page if not logged in
-    window.location.href = "/login";
-  } else {
-    // Redirect to the buy plan page with plan ID
-    window.location.href = `/buyplan/${planId}`;
+    navigate("/login");
+    return;
+  }
+
+  // Find selected plan
+  const selectedPlan = plans.find((p) => p.id === planId);
+  if (!selectedPlan) {
+    alert("Invalid plan selected.");
+    return;
+  }
+
+  try {
+    const res = await moviesApiClient.get("/paymentgatewayinfo", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const razorpay = res.data?.results?.razorpay;
+
+    if (!razorpay || !razorpay.enabled) {
+      alert("Payment is currently unavailable.");
+      return;
+    }
+
+    const options = {
+      key: razorpay.key,
+      amount: selectedPlan.price * 100, // convert ₹ to paise
+      currency: "INR",
+      name: razorpay.name,
+      description: razorpay.title,
+      image: razorpay.logo,
+      handler: function (response: any) {
+        alert("Payment successful: " + response.razorpay_payment_id);
+      },
+      theme: {
+        color: razorpay.color,
+      },
+    };
+
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
+  } catch (err) {
+    console.error("Error during payment:", err);
   }
 };
-
 
   if (loading) return <p style={{ color: "#fff" }}>Loading...</p>;
 
@@ -84,15 +125,16 @@ const PricingPage: React.FC = () => {
                     {plan.video_device_text}
                   </li>
                   <li>
-                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Devices to watch limit:{" "}
-                    {plan.device_limit}
+                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Devices to watch
+                    limit: {plan.device_limit}
                   </li>
                   <li>
-                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Ads free movies and shows
+                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Ads free movies and
+                    shows
                   </li>
                 </ul>
 
-                <button className="buy-button" onClick={() => handleBuyClick(plan.id)}>
+                <button className="buy-button" onClick={() => handleBuyPlan(plan.id)}>
                   Buy This Plan
                 </button>
               </div>
