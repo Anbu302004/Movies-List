@@ -7,19 +7,17 @@ const PricingPage: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchPlans = async () => {
-      const token = localStorage.getItem("token");
-      console.log("SESSION TOKEN:", token);
+useEffect(() => {
+  const fetchPlans = async () => {
+    const token = localStorage.getItem("token"); // may be null
+    const data = await getSubscriptionPlans(token || undefined);
+    setPlans(data);
+    setLoading(false);
+  };
 
-      const data = await getSubscriptionPlans(token || undefined);
-      console.log("Plans response:", data);
-      setPlans(data);
-      setLoading(false);
-    };
+  fetchPlans();
+}, []);
 
-    fetchPlans();
-  }, []);
 
   if (loading) return <p style={{ color: "#fff" }}>Loading...</p>;
 

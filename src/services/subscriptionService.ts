@@ -5,10 +5,12 @@ export const getSubscriptionPlans = async (
     sessionToken?: string
 ): Promise<SubscriptionPlan[]> => {
     try {
+        const tokenToUse = sessionToken || "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002";
+
         const response = await moviesApiClient.get("/subscriptionlist", {
-            headers: sessionToken
-                ? { Authorization: `Bearer ${sessionToken}` }
-                : {},
+            headers: {
+                Authorization: `Bearer ${tokenToUse}`,
+            },
         });
 
         if (response.data?.data) {
