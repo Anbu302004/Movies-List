@@ -42,7 +42,7 @@ const BuyPlanPage: React.FC = () => {
         });
 
         const orderId = subscriptionRes.data?.results?.razorpay_order_id;
-        console.log("📦 Created orderId:", orderId);
+        console.log("Created orderId:", orderId);
 
         
         setTimeout(() => {
@@ -71,17 +71,17 @@ handler: async function (response: any) {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log("✅ Update Response:", updateRes.data);
+    console.log(" Update Response:", updateRes.data);
 
     const verifyRes = await moviesApiClient.post(`/verifypaymentstatus?oid=${orderId}`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log("🔍 Verification Response:", verifyRes.data);
+    console.log(" Verification Response:", verifyRes.data);
 
     window.location.href = "/pricing";
   } catch (err) {
-    console.error("❌ Verify Payment Error", err); 
+    console.error(" Verify Payment Error", err); 
   }
 },
 
