@@ -3,7 +3,7 @@ import { getSubscriptionPlans } from "../services/subscriptionService";
 import { SubscriptionPlan } from "../hooks/subscriptionplan";
 import tickBullet from "../assets/bullet-round-tick.png";
 import { useNavigate } from "react-router-dom";
-import moviesApiClient from "../services/authApiClient"; // ← Make sure this is correct
+import moviesApiClient from "../services/authApiClient"; 
 
 const PricingPage: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
@@ -14,7 +14,7 @@ const PricingPage: React.FC = () => {
     const fetchPlans = async () => {
       const token =
         localStorage.getItem("token") ||
-        "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002"; // fallback to public token
+        "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002";  
       const data = await getSubscriptionPlans(token);
       setPlans(data);
       setLoading(false);
@@ -83,7 +83,7 @@ const handleBuyPlan = async (planId: number) => {
           padding: "70px",
           background: "#191919",
           color: "white",
-          marginTop: "-140px",
+          marginTop: "-160px",
           marginBottom: "0px",
         }}
       ></h1>
@@ -134,9 +134,10 @@ const handleBuyPlan = async (planId: number) => {
                   </li>
                 </ul>
 
-                <button className="buy-button" onClick={() => handleBuyPlan(plan.id)}>
+                <button className="buy-button" onClick={() => navigate(`/buyplan/${plan.id}`)}>
                   Buy This Plan
                 </button>
+
               </div>
             ))
           ) : (
