@@ -2,21 +2,35 @@ import React, { useEffect, useState } from "react";
 import { getSubscriptionPlans } from "../services/subscriptionService";
 import { SubscriptionPlan } from "../hooks/subscriptionplan";
 import tickBullet from "../assets/bullet-round-tick.png";
+import { useNavigate } from "react-router-dom";
 
 const PricingPage: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-useEffect(() => {
-  const fetchPlans = async () => {
-    const token = localStorage.getItem("token"); // may be null
-    const data = await getSubscriptionPlans(token || undefined);
-    setPlans(data);
-    setLoading(false);
-  };
+  useEffect(() => {
+    const fetchPlans = async () => {
+      const token = localStorage.getItem("token") || "2048|BgBEXAFMieNAqq6vZLmxkGTpZVugLpcmWZXLMead3f3f8002"; // fallback to public token
+      const data = await getSubscriptionPlans(token);
+      setPlans(data);
+      setLoading(false);
+    };
 
-  fetchPlans();
-}, []);
+    fetchPlans();
+  }, []);
+
+  const handleBuyClick = (planId: number) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    // Redirect to login page if not logged in
+    window.location.href = "/login";
+  } else {
+    // Redirect to the buy plan page with plan ID
+    window.location.href = `/buyplan/${planId}`;
+  }
+};
 
 
   if (loading) return <p style={{ color: "#fff" }}>Loading...</p>;
@@ -29,7 +43,7 @@ useEffect(() => {
           background: "#191919",
           color: "white",
           marginTop: "-140px",
-          marginBottom: "-0px",
+          marginBottom: "0px",
         }}
       ></h1>
 
@@ -44,7 +58,7 @@ useEffect(() => {
         </div>
 
         <div className="plans-grid">
-          {Array.isArray(plans) && plans.length > 0 ? (
+          {plans.length > 0 ? (
             plans.map((plan) => (
               <div key={plan.id} className="plan-card">
                 {plan.tagtext && <div className="ribbon">{plan.tagtext}</div>}
@@ -58,28 +72,27 @@ useEffect(() => {
 
                 <ul>
                   <li>
-                    <img src={tickBullet} className="bullet-icon" /> Video Quality:{" "}
+                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Video Quality:{" "}
                     {plan.video_quality_text}
                   </li>
                   <li>
-                    <img src={tickBullet} className="bullet-icon" /> Video Resolution:{" "}
+                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Video Resolution:{" "}
                     {plan.video_resolution_text}
                   </li>
                   <li>
-                    <img src={tickBullet} className="bullet-icon" /> Supported Devices:{" "}
+                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Supported Devices:{" "}
                     {plan.video_device_text}
                   </li>
                   <li>
-                    <img src={tickBullet} className="bullet-icon" /> Devices to watch limit:{" "}
+                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Devices to watch limit:{" "}
                     {plan.device_limit}
                   </li>
                   <li>
-                    <img src={tickBullet} className="bullet-icon" /> Ads free movies and shows
+                    <img src={tickBullet} className="bullet-icon" alt="✔" /> Ads free movies and shows
                   </li>
                 </ul>
 
-                <button
-                  className="buy-button">
+                <button className="buy-button" onClick={() => handleBuyClick(plan.id)}>
                   Buy This Plan
                 </button>
               </div>
