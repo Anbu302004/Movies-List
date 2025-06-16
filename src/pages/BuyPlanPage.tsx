@@ -91,8 +91,13 @@ const BuyPlanPage: React.FC = () => {
                     name: selectedPlan.name,
                     start_date: start,
                     end_date: end,
+                    video_quality_text: selectedPlan.video_quality_text,
+                    video_resolution_text: selectedPlan.video_resolution_text,
+                    video_device_text: selectedPlan.video_device_text,
+                    device_limit: selectedPlan.device_limit
                   })
                 );
+
 
                 window.location.href = `/payment-status?oid=${orderId}`;
               } catch (err) {
