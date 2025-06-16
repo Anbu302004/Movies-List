@@ -60,7 +60,7 @@ const App: React.FC = () => {
         <Route path="/my-account" element={<ProtectedRoute element={<MyAccount />} />} />
         <Route path="/pricing" element={<PricingPage />} /> 
         <Route path="/buyplan/:planId" element={<ProtectedRoute element={<BuyPlanPage />} />} />
-        <Route path="/payment-success" element={<ProtectedRoute element={<PaymentSuccessPage />} />} />
+        <Route path="/payment-status" element={<ProtectedRoute element={<PaymentSuccessPage />} />} />
         <Route path="/account/membership"  element={ <ProtectedRoute element={<Membership />}/> } /> 
         <Route path="/account/profile"  element={ <ProtectedRoute element={<Profile />}/> } />
         <Route path="/account/referfriend"  element={ <ProtectedRoute element={<ReferFriend />}/> } />

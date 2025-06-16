@@ -59,31 +59,32 @@ handler: async function (response: any) {
   console.log("plan_id:", selectedPlan.id);
   console.log("order_id:", orderId);
   console.log("razorpay_payment_id:", response.razorpay_payment_id);
-  console.log("razorpay_signature:", response.razorpay_signature); // ✅ Add this log
+  console.log("razorpay_signature:", response.razorpay_signature);
 
   try {
     const updateRes = await moviesApiClient.post("/updatetransaction", {
-      plan_id: selectedPlan.id,
-      order_id: orderId,
+      razorpay_order_id: orderId,
       razorpay_payment_id: response.razorpay_payment_id,
-      razorpay_signature: response.razorpay_signature, // ✅ Make sure this is included
+      razorpay_signature: response.razorpay_signature,
     }, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log(" Update Response:", updateRes.data);
+    console.log("✅ Update Response:", updateRes.data);
 
     const verifyRes = await moviesApiClient.post(`/verifypaymentstatus?oid=${orderId}`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log(" Verification Response:", verifyRes.data);
+    console.log("🔍 Verification Response:", verifyRes.data);
 
-    window.location.href = "/pricing";
+    // ✅ FINAL SUCCESS REDIRECT
+    window.location.href = `/payment-status?oid=${orderId}`;
   } catch (err) {
-    console.error(" Verify Payment Error", err); 
+    console.error("❌ Verify Payment Error", err); 
   }
 },
+
 
             theme: { color: razorpay.color },
             modal: {
