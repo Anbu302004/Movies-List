@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const sidebarLinks = [
@@ -10,6 +10,33 @@ const sidebarLinks = [
 ];
 
 const MyAccount: React.FC = () => {
+  const [plan, setPlan] = useState<any>(null);
+  const [userName, setUserName] = useState<string>('User');
+
+  useEffect(() => {
+    const planData = localStorage.getItem("active_plan");
+    if (planData) {
+      try {
+        const parsedPlan = JSON.parse(planData);
+        setPlan(parsedPlan);
+      } catch (error) {
+        console.error("Error parsing stored plan:", error);
+      }
+    }
+
+    const storedName = localStorage.getItem("user_name");
+    if (storedName) setUserName(storedName);
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
   return (
     <div>
       <h1 style={{
@@ -19,52 +46,21 @@ const MyAccount: React.FC = () => {
         marginTop: "-140px",
         marginBottom: "0px",
       }} />
-      
-      <div style={{
-        backgroundColor: '#161616',
-        color: '#fff',
-        minHeight: '100vh',
-        display: 'flex',
-      }}>
-        
-        {/* Left Sidebar */}
-        <aside style={{
-          width: '260px',
-          padding: '30px 20px',
-          backgroundColor: '#161616',
-          marginTop: "20px",
-          marginLeft: "100px"
-        }}>
-          <Link to="/home" style={{
-            color: '#fff',
-            textDecoration: 'none',
-            fontSize: '14px',
-            paddingLeft: "30px"
-          }}>
+
+      <div style={{ backgroundColor: '#161616', color: '#fff', minHeight: '100vh', display: 'flex' }}>
+        {/* Sidebar */}
+        <aside style={{ width: '260px', padding: '30px 20px', backgroundColor: '#161616', marginTop: "20px", marginLeft: "100px" }}>
+          <Link to="/home" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px', paddingLeft: "30px" }}>
             ← Back to BESTCAST
           </Link>
 
-          <div style={{
-            backgroundColor: '#fff',
-            color: '#000',
-            borderRadius: '6px',
-            marginTop: '30px',
-            overflow: 'hidden',
-          }}>
-            <div style={{
-              backgroundColor: '#cc1e24',
-              padding: '12px 16px',
-              fontWeight: 'bold',
-              color: '#fff'
-            }}>
+          <div style={{ backgroundColor: '#fff', color: '#000', borderRadius: '6px', marginTop: '30px', overflow: 'hidden' }}>
+            <div style={{ backgroundColor: '#cc1e24', padding: '12px 16px', fontWeight: 'bold', color: '#fff' }}>
               My Account
             </div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {sidebarLinks.map(({ name, path }, index) => (
-                <li key={name} style={{          
-                  padding: '10px 16px', 
-                  backgroundColor: '#f7f7f7',
-                }}>
+                <li key={name} style={{ padding: '10px 16px', backgroundColor: '#f7f7f7' }}>
                   <Link to={path} style={{
                     textDecoration: 'none',
                     color: index === 0 ? '#cc1e24' : '#000',
@@ -85,13 +81,7 @@ const MyAccount: React.FC = () => {
           {/* Membership Section */}
           <section style={{ marginBottom: '40px' }}>
             <h4 style={{ fontSize: '1.1rem', marginBottom: '10px' }}>Membership details</h4>
-            <div style={{
-              backgroundColor: '#fff',
-              color: '#000',
-              padding: '40px',
-              borderRadius: '5px',
-              width: "750px"
-            }}>
+            <div style={{ backgroundColor: '#fff', color: '#000', padding: '40px', borderRadius: '5px', width: "750px" }}>
               <span style={{
                 background: 'linear-gradient(to left, rgb(0, 181, 49), rgb(12, 18, 227), rgb(189, 8, 199), rgb(219, 24, 96))',
                 color: '#fff',
@@ -101,23 +91,34 @@ const MyAccount: React.FC = () => {
                 marginLeft: '-40px',
                 fontSize: '20px'
               }}>
-                Member since Apr 2025
+                {plan ? `Member since ${formatDate(plan.start_date)}` : 'No Active Membership'}
               </span>
-              <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>No Plan</h3>
-              <p style={{ margin: 0 }}>Current Membership expired.</p>
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
-                <button style={{
-                  backgroundColor: '#cc1e24',
-                  color: '#fff',
-                  padding: '10px 20px',
-                  border: 'none',
-                  marginTop: '15px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold'
-                }}>
-                  Choose Plan
-                </button>
-              </Link>
+
+              {plan ? (
+                <>
+                  <h2 style={{ marginTop: '20px', marginBottom: '5px' }}>{plan.title}</h2>
+                  <h3 style={{ marginTop: '5px', marginBottom: '5px', color: 'red' }}>{plan.name}</h3>
+                  <p style={{ margin: 0 }}>Current Membership ends on: {formatDate(plan.end_date)}</p>
+                </>
+              ) : (
+                <>
+                  <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>No Plan</h3>
+                  <p style={{ margin: 0 }}>Current Membership expired.</p>
+                  <Link to="/pricing">
+                    <button style={{
+                      backgroundColor: '#cc1e24',
+                      color: '#fff',
+                      padding: '10px 20px',
+                      border: 'none',
+                      marginTop: '15px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}>
+                      Choose Plan
+                    </button>
+                  </Link>
+                </>
+              )}
               <p style={{ marginTop: '15px', cursor: "pointer" }} className='acc'>Manage Membership</p>
             </div>
           </section>
@@ -125,14 +126,8 @@ const MyAccount: React.FC = () => {
           {/* Profile Section */}
           <section>
             <h4 style={{ fontSize: '1.1rem', marginBottom: '10px' }}>Profile information</h4>
-            <div style={{
-              backgroundColor: '#fff',
-              color: '#000',
-              padding: '40px',
-              borderRadius: '5px',
-              width: "770px"
-            }}>
-              <p style={{ fontWeight: 'bold' }}>User</p>
+            <div style={{ backgroundColor: '#fff', color: '#000', padding: '40px', borderRadius: '5px', width: "770px" }}>
+              <p style={{ fontWeight: 'bold' }}>{userName}</p>
               <p style={{ cursor: "pointer" }} className='acc'>Manage Account</p>
             </div>
           </section>

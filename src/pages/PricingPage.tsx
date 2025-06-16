@@ -3,7 +3,6 @@ import { getSubscriptionPlans } from "../services/subscriptionService";
 import { SubscriptionPlan } from "../hooks/subscriptionplan";
 import tickBullet from "../assets/bullet-round-tick.png";
 import { useNavigate } from "react-router-dom";
-import moviesApiClient from "../services/authApiClient";
 
 const PricingPage: React.FC = () => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
@@ -85,11 +84,10 @@ const PricingPage: React.FC = () => {
 
                 <button
                   className="buy-button"
-                  onClick={() =>
-                    navigate(`/buyplan/${plan.id}`, {
-                      state: { selectedPlan: plan },
-                    })
-                  }
+                  onClick={() => {
+                    localStorage.setItem("active_plan", JSON.stringify(plan));
+                    navigate(`/buyplan/${plan.id}`, { state: { selectedPlan: plan } });
+                  }}
                 >
                   Buy This Plan
                 </button>

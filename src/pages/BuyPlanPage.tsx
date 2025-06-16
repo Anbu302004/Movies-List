@@ -36,56 +36,69 @@ const BuyPlanPage: React.FC = () => {
 
         setGateway(razorpay);
 
-        // Step 1: Create subscription before opening payment popup
-        const subscriptionRes = await moviesApiClient.post(`/createsubscription/${selectedPlan.id}`, {}, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const subscriptionRes = await moviesApiClient.post(
+          `/createsubscription/${selectedPlan.id}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const orderId = subscriptionRes.data?.results?.razorpay_order_id;
         console.log("Created orderId:", orderId);
 
-        
         setTimeout(() => {
           const options = {
             key: razorpay.key,
-            amount: selectedPlan.price * 100, // ₹ to paise
+            amount: selectedPlan.price * 100,
             currency: "INR",
             name: razorpay.name,
-            description: razorpay.title,
+            description: selectedPlan.title, // important: use plan title from Pricing
             image: razorpay.logo,
             order_id: orderId,
-handler: async function (response: any) {
-  console.log("🧾 Payment Success");
-  console.log("plan_id:", selectedPlan.id);
-  console.log("order_id:", orderId);
-  console.log("razorpay_payment_id:", response.razorpay_payment_id);
-  console.log("razorpay_signature:", response.razorpay_signature);
+            handler: async function (response: any) {
+              console.log("🧾 Payment Success");
 
-  try {
-    const updateRes = await moviesApiClient.post("/updatetransaction", {
-      razorpay_order_id: orderId,
-      razorpay_payment_id: response.razorpay_payment_id,
-      razorpay_signature: response.razorpay_signature,
-    }, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+              try {
+                await moviesApiClient.post(
+                  "/updatetransaction",
+                  {
+                    razorpay_order_id: orderId,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                  },
+                  {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }
+                );
 
-    console.log("✅ Update Response:", updateRes.data);
+                await moviesApiClient.post(
+                  `/verifypaymentstatus?oid=${orderId}`,
+                  {},
+                  {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }
+                );
 
-    const verifyRes = await moviesApiClient.post(`/verifypaymentstatus?oid=${orderId}`, {}, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+                const durationInDays = selectedPlan.duration_in_days || 30;
+                const start = new Date().toISOString();
+                const end = new Date(Date.now() + durationInDays * 24 * 60 * 60 * 1000).toISOString();
 
-    console.log("🔍 Verification Response:", verifyRes.data);
+                localStorage.setItem(
+                  "active_plan",
+                  JSON.stringify({
+                    title: selectedPlan.title,
+                    name: selectedPlan.name,
+                    start_date: start,
+                    end_date: end,
+                  })
+                );
 
-    // ✅ FINAL SUCCESS REDIRECT
-    window.location.href = `/payment-status?oid=${orderId}`;
-  } catch (err) {
-    console.error("❌ Verify Payment Error", err); 
-  }
-},
-
-
+                window.location.href = `/payment-status?oid=${orderId}`;
+              } catch (err) {
+                console.error("❌ Payment verification error", err);
+              }
+            },
             theme: { color: razorpay.color },
             modal: {
               ondismiss: () => {
@@ -108,14 +121,24 @@ handler: async function (response: any) {
   if (!gateway) return <p>Loading payment details...</p>;
 
   return (
-    <div className="payment-container" style={{ textAlign: "center", padding: "40px", background: "#111", color: "#fff" }}>
-      <h2 style={{ marginBottom: "20px", fontSize: "50px" }}>{gateway.title}</h2>
+    <div
+      className="payment-container"
+      style={{
+        textAlign: "center",
+        padding: "40px",
+        background: "#111",
+        color: "#fff",
+      }}
+    >
+      <h2 style={{ marginBottom: "20px", fontSize: "50px" }}>
+        {gateway.title}
+      </h2>
       <div
         className="payment-content"
         dangerouslySetInnerHTML={{ __html: gateway.content }}
       />
       <button
-        onClick={() => window.location.href = "/pricing"}
+        onClick={() => (window.location.href = "/pricing")}
         style={{
           marginTop: 20,
           background: "#555",
