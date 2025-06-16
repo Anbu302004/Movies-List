@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import tickBullet from "../assets/bullet-round-tick.png";
 
 const sidebarLinks = [
   { name: 'Overview', path: '/my-account' },
@@ -10,6 +11,29 @@ const sidebarLinks = [
 ];
 
 const Membership: React.FC = () => {
+  const [plan, setPlan] = useState<any>(null);
+
+  useEffect(() => {
+    const planData = localStorage.getItem("active_plan");
+    if (planData) {
+      try {
+        const parsed = JSON.parse(planData);
+        setPlan(parsed);
+      } catch (err) {
+        console.error("Error parsing plan from storage:", err);
+      }
+    }
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
   return (
     <div>
       <h1 style={{
@@ -80,8 +104,8 @@ const Membership: React.FC = () => {
         {/* Main Content */}
         <main style={{ flex: 1, padding: '20px', marginBottom: "80px" }}>
           <h1 style={{ fontSize: '2rem', marginBottom: '30px' }}>Membership</h1>
+
           <h4>Plan Details</h4>
-          {/* Plan Details Box */}
           <div style={{
             backgroundColor: '#fff',
             color: '#000',
@@ -90,24 +114,57 @@ const Membership: React.FC = () => {
             width: "750px",
             marginBottom: '20px'
           }}>
-            <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>No Plan</h3>
-            <p style={{ margin: 0, paddingTop: "15px", paddingBottom: "10px" }}>Current Membership expired.</p>
-            <Link to="/pricing" style={{ textDecoration: 'none' }}>
-              <button style={{
-                backgroundColor: '#cc1e24',
-                color: '#fff',
-                padding: '10px 20px',
-                border: 'none',
-                marginTop: '15px',
-                cursor: 'pointer',
-                fontWeight: 'bold'
-              }}>
-                Choose Plan
-              </button>
-            </Link>
+{plan ? (
+  <>
+  <h2 style={{ marginTop: '20px', marginBottom: '5px' }}>{plan.title}</h2>
+  <p style={{ marginTop: "15px", fontWeight: "bold" }}>
+     Current Membership end at : {formatDate(plan.end_date)}
+    </p>
+    <ul style={{ paddingLeft: "20px", lineHeight: "2", listStyleType: "none" }}>
+      <li>
+        <img src={tickBullet} className="bullet-icon" alt="✔" /> Video Quality:{" "}
+        {plan.video_quality_text}
+      </li>
+      <li>
+        <img src={tickBullet} className="bullet-icon" alt="✔" /> Video Resolution:{" "}
+        {plan.video_resolution_text}
+      </li>
+      <li>
+        <img src={tickBullet} className="bullet-icon" alt="✔" /> Supported Devices:{" "}
+        {plan.video_device_text}
+      </li>
+      <li>
+        <img src={tickBullet} className="bullet-icon" alt="✔" /> Devices to watch limit:{" "}
+        {plan.device_limit}
+      </li>
+      <li>
+        <img src={tickBullet} className="bullet-icon" alt="✔" /> Ads free movies and shows
+      </li>
+    </ul>
+  </>
+) : (
+  <>
+    <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>No Plan</h3>
+    <p style={{ margin: 0 }}>Current Membership expired.</p>
+    <Link to="/pricing" style={{ textDecoration: 'none' }}>
+      <button style={{
+        backgroundColor: '#cc1e24',
+        color: '#fff',
+        padding: '10px 20px',
+        border: 'none',
+        marginTop: '15px',
+        cursor: 'pointer',
+        fontWeight: 'bold'
+      }}>
+        Choose Plan
+      </button>
+    </Link>
+  </>
+)}
+
           </div>
+
           <h4>Payment Info</h4>
-          {/* Payment Info Box */}
           <div style={{
             backgroundColor: '#fff',
             color: '#000',
@@ -115,7 +172,9 @@ const Membership: React.FC = () => {
             borderRadius: '5px',
             width: "750px"
           }}>
-            <p style={{ fontWeight:"bold" }}>No payment method active right now.</p>
+            <p style={{ fontWeight: "bold" }}>
+              {plan ? "Your payment was successful via Razorpay." : "No payment method active right now."}
+            </p>
           </div>
         </main>
       </div>

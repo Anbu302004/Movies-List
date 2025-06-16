@@ -53,7 +53,7 @@ const BuyPlanPage: React.FC = () => {
             amount: selectedPlan.price * 100,
             currency: "INR",
             name: razorpay.name,
-            description: selectedPlan.title, // important: use plan title from Pricing
+            description: selectedPlan.title,  
             image: razorpay.logo,
             order_id: orderId,
             handler: async function (response: any) {
