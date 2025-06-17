@@ -48,12 +48,15 @@ const BuyPlanPage: React.FC = () => {
         console.log("Created orderId:", orderId);
 
         setTimeout(() => {
+          // 🧹 Clear any previous active plan
+          localStorage.removeItem("active_plan");
+
           const options = {
             key: razorpay.key,
             amount: selectedPlan.price * 100,
             currency: "INR",
             name: razorpay.name,
-            description: selectedPlan.title,  
+            description: selectedPlan.title,
             image: razorpay.logo,
             order_id: orderId,
             handler: async function (response: any) {
@@ -72,7 +75,7 @@ const BuyPlanPage: React.FC = () => {
                   }
                 );
 
-                await moviesApiClient.post(
+                const verifyRes = await moviesApiClient.post(
                   `/verifypaymentstatus?oid=${orderId}`,
                   {},
                   {
@@ -80,28 +83,33 @@ const BuyPlanPage: React.FC = () => {
                   }
                 );
 
-                const durationInDays = selectedPlan.duration_in_days || 30;
-                const start = new Date().toISOString();
-                const end = new Date(Date.now() + durationInDays * 24 * 60 * 60 * 1000).toISOString();
+                // ✅ Only proceed if verified success
+                if (verifyRes.data?.status === "success") {
+                  const durationInDays = selectedPlan.duration_in_days || 30;
+                  const start = new Date().toISOString();
+                  const end = new Date(Date.now() + durationInDays * 24 * 60 * 60 * 1000).toISOString();
 
-                localStorage.setItem(
-                  "active_plan",
-                  JSON.stringify({
-                    title: selectedPlan.title,
-                    name: selectedPlan.name,
-                    start_date: start,
-                    end_date: end,
-                    video_quality_text: selectedPlan.video_quality_text,
-                    video_resolution_text: selectedPlan.video_resolution_text,
-                    video_device_text: selectedPlan.video_device_text,
-                    device_limit: selectedPlan.device_limit
-                  })
-                );
+                  localStorage.setItem(
+                    "active_plan",
+                    JSON.stringify({
+                      title: selectedPlan.title,
+                      name: selectedPlan.name,
+                      start_date: start,
+                      end_date: end,
+                      video_quality_text: selectedPlan.video_quality_text,
+                      video_resolution_text: selectedPlan.video_resolution_text,
+                      video_device_text: selectedPlan.video_device_text,
+                      device_limit: selectedPlan.device_limit
+                    })
+                  );
 
-
-                window.location.href = `/payment-status?oid=${orderId}`;
+                  window.location.href = `/payment-status?oid=${orderId}`;
+                } else {
+                  alert("❌ Payment failed or not verified.");
+                }
               } catch (err) {
                 console.error("❌ Payment verification error", err);
+                alert("❌ Payment verification failed.");
               }
             },
             theme: { color: razorpay.color },
