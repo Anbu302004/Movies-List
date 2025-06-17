@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import Hls from "hls.js";
+import Hls from "hls.js";  
+import Skeleton from '@mui/material/Skeleton';
+import "react-loading-skeleton/dist/skeleton.css";
 import useBlockMovies from "../hooks/useBlockMovies";
 import { IMAGE_BASE_URL } from "../services/moviesApiClient";
 import "../index.css";
@@ -38,6 +40,18 @@ interface BlockListProps {
 
 const ITEMS_PER_PAGE = 5;
 
+const SkeletonMovieCard = () => (
+  <div className="movie-card">
+    <Skeleton
+  variant="rectangular"
+  width={210}
+  height={118}
+  sx={{ bgcolor: 'grey.900', borderRadius: '8px' }}
+/>
+
+  </div>
+);
+
 const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
   const { data: topten = [], isLoading: loadingNew, error: errorNew } = useBlockMovies("Top Ten Movies");
   const { data: newmovies = [], isLoading: loadingTrending, error: errorTrending } = useBlockMovies("New Movie For You");
@@ -49,7 +63,6 @@ const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [myList, setMyList] = useState<Movie[]>([]);
 
-  // Pagination state per list title
   const [pageIndexes, setPageIndexes] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
@@ -66,8 +79,27 @@ const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
 
   const filterMovies = (movies: Movie[]) =>
     filterIds ? movies.filter((movie) => filterIds.includes(movie.id)) : movies;
+if (loadingNew || loadingTrending || loadingComedy || loadingkids || loadingromance) {
+  return (
+    <div className="popular-container">
+      <h6 className="popular-heading"></h6>
+      <div className="movies-grid">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Skeleton
+            key={index}
+            variant="rectangular"
+            width={300}
+            height={180}
+            sx={{ bgcolor: 'grey.900', borderRadius: '8px' }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-  if (loadingNew || loadingTrending || loadingComedy || loadingkids || loadingromance) return <p>Loading...</p>;
+
+
   if (errorNew || errorTrending || errorComedy || errorkids || errorromance) return <p>Error loading movies.</p>;
 
   const handlePrev = (listTitle: string) => {
@@ -88,33 +120,15 @@ const BlockList: React.FC<BlockListProps> = ({ filterIds }) => {
     const filtered = filterMovies(movies);
     if (filtered.length === 0) return null;
 
-    // Current page index for this list
     const currentPage = pageIndexes[listTitle] || 0;
     const maxPage = Math.floor((filtered.length - 1) / ITEMS_PER_PAGE);
     const paginatedMovies = filtered.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
 
-    // Hide pagination if movies count is 5 or less
     const showPagination = filtered.length > ITEMS_PER_PAGE;
 
     return (
       <div className="popular-container">
         <h1 className="popular-heading">{listTitle}</h1>
-
-        {showPagination && (
-  <div
-    className="pagination-buttons"
-    style={{  
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-    }}
-  >
-     
-  </div>
-)}
-
-
-
         <div className="movies-grid">
           {paginatedMovies.map((movie, index) => {
             const uniqueHoverId = `${listTitle}-${movie.id}-${index}`;
@@ -257,7 +271,7 @@ const MoviePopup: React.FC<{
   };
 
   return (
-        <div className="popup-overlay" onClick={onClose}>
+    <div className="popup-overlay" onClick={onClose}>
       <div className="popup-content scrollable-popup" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>
           <X size={24} />
@@ -304,4 +318,3 @@ const MoviePopup: React.FC<{
 };
 
 export default BlockList;
-

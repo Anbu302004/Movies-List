@@ -13,21 +13,23 @@ export interface Language {
 
 const fetchGenres = async () => {
     const response = await moviesApiClient.get("/genrelist");
-
     if (!response.data || !response.data.data) {
         throw new Error("Invalid API response format");
     }
 
+    // Add artificial delay (1.5 seconds)
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     return response.data.data;
 };
 
 const fetchLanguages = async () => {
     const response = await moviesApiClient.get("/languagelist");
-
     if (!response.data || !response.data.data) {
         throw new Error("Invalid API response format");
     }
 
+    // Add artificial delay (1.5 seconds)
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     return response.data.data;
 };
 

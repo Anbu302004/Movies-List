@@ -4,6 +4,7 @@ import BannerList from "../components/BannerList";
 import MoviesList from "../components/MoviesList";
 import useMovieMetadata from "../hooks/useMovieMetadata";
 import GenreBlockList from "../components/GenreBlockList";
+import Skeleton from "@mui/material/Skeleton";
 import "../index.css";
 
 interface Genre {
@@ -19,6 +20,17 @@ interface Language {
 interface MoviesPageProps {
   searchQuery: string;
 }
+
+const SkeletonMovieCard = () => (
+  <div className="movie-card" > 
+    <Skeleton
+      variant="rectangular"
+      width={210}
+      height={118}
+      sx={{ bgcolor: 'grey.900', borderRadius: '8px' }}
+    />
+  </div>
+);
 
 const MoviesPage: React.FC<MoviesPageProps> = ({ searchQuery }) => {
   const { genreId } = useParams();
@@ -48,7 +60,16 @@ const MoviesPage: React.FC<MoviesPageProps> = ({ searchQuery }) => {
     }
   }, [selectedGenre, genreId]);
 
-  if (isGenresLoading || isLanguagesLoading) return <div>Loading filters...</div>;
+  if (isGenresLoading || isLanguagesLoading) {
+    return (
+      <div className="popular-container" style={{ display: "flex", flexWrap: "wrap", gap: "16px", padding: "16px 0" }}>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SkeletonMovieCard key={index} />
+        ))}
+      </div>
+    );
+  }
+
   if (error) return <div>Error loading filters.</div>;
 
   const selectedGenreTitle =
@@ -63,13 +84,11 @@ const MoviesPage: React.FC<MoviesPageProps> = ({ searchQuery }) => {
         />
       </div>
 
-      <div className="movie-list-wrapper"> 
-        {selectedGenre && (
-          <GenreBlockList genreId={parseInt(selectedGenre)} />
-        )}
- 
+      <div className="movie-list-wrapper">
+        {selectedGenre && <GenreBlockList genreId={parseInt(selectedGenre)} />}
+
         {!selectedGenre && (
-           <MoviesList
+          <MoviesList
             searchQuery={searchQuery}
             selectedGenre={selectedGenre}
             selectedLanguage={selectedLanguage}
@@ -77,15 +96,14 @@ const MoviesPage: React.FC<MoviesPageProps> = ({ searchQuery }) => {
           />
         )}
 
-        {/* ✅ Show MoviesList with all movies when no genre is selected */}
         {!selectedGenre && (
           <MoviesList
-          searchQuery={searchQuery}
-          filterIds={["2", "5"]} // Filter for Thriller Movies
-          title="Thriller Movies"
-        />
+            searchQuery={searchQuery}
+            filterIds={["2", "5"]}
+            title="Thriller Movies"
+          />
         )}
-      </div> 
+      </div>
 
       <div className="dropdown-center">
         <div className="custom-dropdownleft-wrapper">

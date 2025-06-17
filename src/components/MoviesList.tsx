@@ -4,6 +4,7 @@ import useMovies from "../hooks/useMovies";
 import { IMAGE_BASE_URL } from "../services/moviesApiClient";
 import "../index.css";
 import { Volume2, VolumeX, X } from "lucide-react";
+import Skeleton from "@mui/material/Skeleton";
 import playIcon from "../assets/play.png";
 import plusIcon from "../assets/plus.png";
 import likeIcon from "../assets/like.png";
@@ -51,6 +52,18 @@ interface MoviesListProps {
   selectedLanguage?: string;
 }
 
+// ✅ Skeleton Movie Card
+const SkeletonMovieCard = () => (
+  <div className="movie-card">
+    <Skeleton
+      variant="rectangular"
+      width={210}
+      height={118}
+      sx={{ bgcolor: "grey.900", borderRadius: "8px" }}
+    />
+  </div>
+);
+
 const MoviesList: React.FC<MoviesListProps> = ({
   searchQuery,
   filterIds,
@@ -63,27 +76,49 @@ const MoviesList: React.FC<MoviesListProps> = ({
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const moviesPerPage = 5;
-   const [myList, setMyList] = useState<Movie[]>([]);
-  
-    useEffect(() => {
-      const storedList = JSON.parse(localStorage.getItem("myList") || "[]");
-      setMyList(storedList);
-    }, []);
-  
-    const toggleMyList = (movie: Movie) => {
-      const exists = myList.some((m) => m.id === movie.id);
-      const updatedList = exists ? myList.filter((m) => m.id !== movie.id) : [...myList, movie];
-      setMyList(updatedList);
-      localStorage.setItem("myList", JSON.stringify(updatedList));
-    };
+  const [myList, setMyList] = useState<Movie[]>([]);
 
-  if (isLoading) return <p>Loading movies...</p>;
+  useEffect(() => {
+    const storedList = JSON.parse(localStorage.getItem("myList") || "[]");
+    setMyList(storedList);
+  }, []);
+
+  const toggleMyList = (movie: Movie) => {
+    const exists = myList.some((m) => m.id === movie.id);
+    const updatedList = exists ? myList.filter((m) => m.id !== movie.id) : [...myList, movie];
+    setMyList(updatedList);
+    localStorage.setItem("myList", JSON.stringify(updatedList));
+  };
+
+  if (isLoading) {
+    return (
+      <div className="popular-container">
+        {title && <h1 className="popular-heading">{title}</h1>}
+        <div className="movies-container">
+          <div className="movies-row">
+            <div className="movies-grid">
+              {Array.from({ length: 4 }).map((_, index) => (
+                 <Skeleton
+                    key={index}
+                    variant="rectangular"
+                    width={300}
+                    height={180}
+                    sx={{ bgcolor: 'grey.900', borderRadius: '8px' }}
+                  />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (error) return <p>Error loading movies: {error.message}</p>;
 
   const filteredMovies = movies?.filter((movie: Movie) => {
     const matchesQuery = movie.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesGenre = !selectedGenre || movie.genres.some(g => g.id === selectedGenre);
-    const matchesLanguage = !selectedLanguage || movie.languages.some(l => l.id === selectedLanguage);
+    const matchesGenre = !selectedGenre || movie.genres.some((g) => g.id === selectedGenre);
+    const matchesLanguage = !selectedLanguage || movie.languages.some((l) => l.id === selectedLanguage);
     const matchesFilterIds = !filterIds || filterIds.includes(movie.id);
     return matchesQuery && matchesGenre && matchesLanguage && matchesFilterIds;
   }) || [];
@@ -137,11 +172,11 @@ const MoviesList: React.FC<MoviesListProps> = ({
                         <div className="action-icons-left">
                           <img src={playIcon} alt="Play" className="action-icon" />
                           <img
-                          src={myList.some((m) => m.id === movie.id) ? tickIcon : plusIcon}
-                          alt="Toggle My List"
-                          className="action-icon"
-                          onClick={() => toggleMyList(movie)}
-                        />
+                            src={myList.some((m) => m.id === movie.id) ? tickIcon : plusIcon}
+                            alt="Toggle My List"
+                            className="action-icon"
+                            onClick={() => toggleMyList(movie)}
+                          />
                           <img src={likeIcon} alt="Like" className="action-icon" />
                         </div>
                         <img
@@ -210,10 +245,7 @@ const HlsVideo: React.FC<{ src: string }> = ({ src }) => {
 
   return (
     <div className="video-container">
-      <video ref={videoRef} className="trailer-video" autoPlay loop muted={isMuted} playsInline>
-        <source src={src} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <video ref={videoRef} className="trailer-video" autoPlay loop muted={isMuted} playsInline />
       <button className="mute-button" onClick={toggleMute}>
         {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
       </button>

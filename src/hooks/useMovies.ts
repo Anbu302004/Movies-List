@@ -23,6 +23,7 @@ interface Movie {
 }
 
 const fetchMovies = async (): Promise<Movie[]> => {
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const response = await moviesApiClient.get("/movieslist");
 
     if (!response.data || !response.data.data) {
@@ -63,7 +64,7 @@ const fetchMovies = async (): Promise<Movie[]> => {
 };
 
 const useMovies = () => {
-    return useQuery<Movie[]>({ queryKey: ["movies"], queryFn: fetchMovies });
+    return useQuery<Movie[]>({ queryKey: ["movies"], queryFn: fetchMovies, staleTime: 1000 });
 };
 
 export default useMovies;
