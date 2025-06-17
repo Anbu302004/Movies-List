@@ -48,7 +48,7 @@ const BuyPlanPage: React.FC = () => {
         console.log("Created orderId:", orderId);
 
         setTimeout(() => {
-          // 🧹 Clear any previous active plan
+          // 🧹 Clear previous plan
           localStorage.removeItem("active_plan");
 
           const options = {
@@ -83,9 +83,17 @@ const BuyPlanPage: React.FC = () => {
                   }
                 );
 
-                // ✅ Only proceed if verified success
                 if (verifyRes.data?.status === "success") {
-                  const durationInDays = selectedPlan.duration_in_days || 30;
+                  // ⏳ Duration Mapping
+                  let durationInDays = 30;
+                  const durationText = selectedPlan.duration_text?.toLowerCase();
+
+                  if (durationText?.includes("6")) {
+                    durationInDays = 180;
+                  } else if (durationText?.includes("year")) {
+                    durationInDays = 365;
+                  }
+
                   const start = new Date().toISOString();
                   const end = new Date(Date.now() + durationInDays * 24 * 60 * 60 * 1000).toISOString();
 
