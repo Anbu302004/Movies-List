@@ -48,8 +48,9 @@ const BuyPlanPage: React.FC = () => {
         console.log("Created orderId:", orderId);
 
         setTimeout(() => {
-          // 🧹 Clear previous plan
           localStorage.removeItem("active_plan");
+
+          const userPhone = localStorage.getItem("user_phone") || "";
 
           const options = {
             key: razorpay.key,
@@ -59,6 +60,9 @@ const BuyPlanPage: React.FC = () => {
             description: selectedPlan.title,
             image: razorpay.logo,
             order_id: orderId,
+            prefill: {
+              contact: userPhone, // ✅ Mobile number from login
+            },
             handler: async function (response: any) {
               console.log("🧾 Payment Success");
 
@@ -84,7 +88,6 @@ const BuyPlanPage: React.FC = () => {
                 );
 
                 if (verifyRes.data?.status === "success") {
-                  // ⏳ Duration Mapping
                   let durationInDays = 30;
                   const durationText = selectedPlan.duration_text?.toLowerCase();
 
@@ -107,7 +110,7 @@ const BuyPlanPage: React.FC = () => {
                       video_quality_text: selectedPlan.video_quality_text,
                       video_resolution_text: selectedPlan.video_resolution_text,
                       video_device_text: selectedPlan.video_device_text,
-                      device_limit: selectedPlan.device_limit
+                      device_limit: selectedPlan.device_limit,
                     })
                   );
 
