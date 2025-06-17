@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie'; // ✅ Make sure this is installed: `npm install js-cookie`
+import Cookies from 'js-cookie';  
 
 const sidebarLinks = [
   { name: 'Overview', path: '/my-account' },
@@ -28,10 +28,9 @@ const Profile: React.FC = () => {
   const handleDelete = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete your account?");
     if (!confirmDelete) return;
-
-    // ✅ Remove from localStorage and cookies
+ 
     localStorage.clear();
-    Cookies.remove("token"); // <-- THIS LINE IS IMPORTANT
+    Cookies.remove("token"); 
 
     alert("✅ Account deleted.");
     navigate("/login");
