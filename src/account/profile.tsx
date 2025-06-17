@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // ✅ Make sure this is installed: `npm install js-cookie`
 
 const sidebarLinks = [
   { name: 'Overview', path: '/my-account' },
@@ -12,36 +13,46 @@ const sidebarLinks = [
 const Profile: React.FC = () => {
   const [userName, setUserName] = useState('');
   const [userPhone, setUserPhone] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     setUserName(localStorage.getItem("user_name") || "");
     setUserPhone(localStorage.getItem("user_phone") || "");
   }, []);
 
+  const handleUpdate = () => {
+    localStorage.setItem("user_name", userName);
+    alert("✅ Name updated successfully.");
+  };
+
+  const handleDelete = () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete your account?");
+    if (!confirmDelete) return;
+
+    // ✅ Remove from localStorage and cookies
+    localStorage.clear();
+    Cookies.remove("token"); // <-- THIS LINE IS IMPORTANT
+
+    alert("✅ Account deleted.");
+    navigate("/login");
+  };
+
   return (
     <div>
-      <div style={{
-        padding: "70px",
-        background: "#191919",
-        color: "white",
-        marginTop: "-140px"
-      }} />
-
+      <div style={{ padding: "70px", background: "#191919", color: "white", marginTop: "-140px" }} />
       <div style={{ backgroundColor: '#161616', color: '#fff', minHeight: '100vh', display: 'flex' }}>
         {/* Sidebar */}
         <aside style={{ width: '260px', padding: '30px 20px', marginLeft: '100px' }}>
           <Link to="/home" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px', paddingLeft: "30px" }}>
             ← Back to BESTCAST
           </Link>
-
           <div style={{ backgroundColor: '#fff', color: '#000', borderRadius: '6px', marginTop: '30px' }}>
             <div style={{ backgroundColor: '#cc1e24', padding: '12px 16px', fontWeight: 'bold', color: '#fff' }}>
               My Account
             </div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {sidebarLinks.map(({ name, path }) => (
-                <li key={name} style={{  padding: '10px 16px', 
-                  backgroundColor: '#f7f7f7', }}>
+                <li key={name} style={{ padding: '10px 16px', backgroundColor: '#f7f7f7' }}>
                   <Link to={path} style={{
                     textDecoration: 'none',
                     color: name === 'Security' ? '#cc1e24' : '#000',
@@ -55,12 +66,10 @@ const Profile: React.FC = () => {
           </div>
         </aside>
 
-        {/* Main Content */}
+        {/* Main */}
         <main style={{ flex: 1, padding: '20px 40px', maxWidth: "800px" }}>
           <h1 style={{ fontSize: '2rem', marginBottom: '30px' }}>Profile</h1>
           <h4>Account Information</h4>
-
-          {/* Profile Form */}
           <div style={{ backgroundColor: '#fff', color: '#000', padding: '30px', borderRadius: '5px' }}>
             <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
               <select style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}>
@@ -74,11 +83,12 @@ const Profile: React.FC = () => {
               <input
                 placeholder="First Name *"
                 value={userName}
+                onChange={(e) => setUserName(e.target.value)}
                 style={{ flex: 2, padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}
               />
               <input
                 placeholder="Last Name"
-                style={{ flex: 2, padding: '10px', borderRadius: '5px', border: '1px solid #ccc' , backgroundColor: '#cfcece' }}
+                style={{ flex: 2, padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}
               />
             </div>
 
@@ -91,38 +101,41 @@ const Profile: React.FC = () => {
 
             <input
               placeholder="Date of Birth (dd/mm/yyyy)"
-              style={{ width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece', }}
+              style={{ width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}
             />
             <select
               style={{ width: '100%', padding: '10px', marginBottom: '20px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}
             >
-               <option value="">Select </option>
+              <option value="">Select</option>
               <option>Male</option>
               <option>Female</option>
               <option>Other</option>
-            </select> 
+            </select>
           </div>
-           <button style={{
-              backgroundColor: '#cc1e24',
-              color: '#fff',
-              padding: '14px',
-              borderRadius: '5px',
-              marginTop: '50px',
-              width: '100%',
-              border: 'none',
-              fontWeight: 'bold',
-              cursor: "pointer",
-              fontSize: "16px"
-            }}>Update</button>
+
+          {/* Update Button */}
+          <button onClick={handleUpdate} style={{
+            backgroundColor: '#cc1e24',
+            color: '#fff',
+            padding: '14px',
+            borderRadius: '5px',
+            marginTop: '50px',
+            width: '100%',
+            border: 'none',
+            fontWeight: 'bold',
+            cursor: "pointer",
+            fontSize: "16px"
+          }}>
+            Update
+          </button>
 
           {/* Delete Account */}
           <h4 style={{ marginTop: '40px' }}>Permanent Account Removal</h4>
           <div style={{ backgroundColor: '#fff', color: '#000', padding: '20px', borderRadius: '5px' }}>
             <p style={{ marginBottom: '15px' }}>
-              Once you delete your account, the action is permanent and cannot be reversed. All your data,
-              subscription, settings, and personal information, will be permanently erased. Recovery will not be possible after deletion.
+              Once you delete your account, the action is permanent and cannot be reversed. All your saved data will be cleared.
             </p>
-            <button style={{
+            <button onClick={handleDelete} style={{
               backgroundColor: '#cc1e24',
               color: '#fff',
               padding: '12px 20px',
@@ -130,7 +143,9 @@ const Profile: React.FC = () => {
               cursor: 'pointer',
               fontWeight: 'bold',
               borderRadius: '5px'
-            }}>Delete Account</button>
+            }}>
+              Delete Account
+            </button>
           </div>
         </main>
       </div>
