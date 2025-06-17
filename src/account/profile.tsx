@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';  
+import Cookies from 'js-cookie';
 
 const sidebarLinks = [
   { name: 'Overview', path: '/my-account' },
@@ -13,24 +13,27 @@ const sidebarLinks = [
 const Profile: React.FC = () => {
   const [userName, setUserName] = useState('');
   const [userPhone, setUserPhone] = useState('');
+  const [userTitle, setUserTitle] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     setUserName(localStorage.getItem("user_name") || "");
     setUserPhone(localStorage.getItem("user_phone") || "");
+    setUserTitle(localStorage.getItem("user_title") || "");
   }, []);
 
   const handleUpdate = () => {
     localStorage.setItem("user_name", userName);
-    alert("✅ Name updated successfully.");
+    localStorage.setItem("user_title", userTitle);
+    alert("✅ Name and title updated successfully.");
   };
 
   const handleDelete = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete your account?");
     if (!confirmDelete) return;
- 
+
     localStorage.clear();
-    Cookies.remove("token"); 
+    Cookies.remove("token");
 
     alert("✅ Account deleted.");
     navigate("/login");
@@ -71,7 +74,11 @@ const Profile: React.FC = () => {
           <h4>Account Information</h4>
           <div style={{ backgroundColor: '#fff', color: '#000', padding: '30px', borderRadius: '5px' }}>
             <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
-              <select style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}>
+              <select
+                value={userTitle}
+                onChange={(e) => setUserTitle(e.target.value)}
+                style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#cfcece' }}
+              >
                 <option value="">Select Title</option>
                 <option value="mr">Mr</option>
                 <option value="mrs">Mrs</option>
