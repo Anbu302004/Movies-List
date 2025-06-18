@@ -12,6 +12,7 @@ import downIcon from "../assets/down.png";
 import leftWhiteIcon from "../assets/left-white.png";
 import rightWhiteIcon from "../assets/right-white.png";
 import tickIcon from "../assets/tick.png";
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface CastMember {
   id: string;
@@ -94,6 +95,7 @@ const MoviesList: React.FC<MoviesListProps> = ({
     return (
       <div className="popular-container">
         {title && <h1 className="popular-heading">{title}</h1>}
+         <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "30px" }} /> 
         <div className="movies-container">
           <div className="movies-row">
             <div className="movies-grid">

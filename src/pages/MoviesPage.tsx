@@ -6,6 +6,8 @@ import useMovieMetadata from "../hooks/useMovieMetadata";
 import GenreBlockList from "../components/GenreBlockList";
 import Skeleton from "@mui/material/Skeleton";
 import "../index.css";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 interface Genre {
   id: string;
@@ -61,12 +63,15 @@ const MoviesPage: React.FC<MoviesPageProps> = ({ searchQuery }) => {
   }, [selectedGenre, genreId]);
 
   if (isGenresLoading || isLanguagesLoading) {
-    return (
-      <div className="popular-container" style={{ display: "flex", flexWrap: "wrap", gap: "16px", padding: "16px 0" }}>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <SkeletonMovieCard key={index} />
-        ))}
-      </div>
+    return ( 
+        <div className="popular-container" style={{ display: "flex", flexWrap: "wrap", gap: "16px", padding: "60px 0" }}>
+          <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "30px" }} /> 
+           
+            {Array.from({ length: 5 }).map((_, index) => (
+              <SkeletonMovieCard key={index} />
+            ))}
+          </div>
+       
     );
   }
 

@@ -10,15 +10,32 @@ interface BannerListProps {
   genreId?: number; // optional for default view
 }
 
-const BannerList: React.FC<BannerListProps> = ({ pageId, genreId }) => { 
+const BannerList: React.FC<BannerListProps> = ({ pageId, genreId }) => {
   const { data: banners = [], isLoading, error } = useBanners(pageId, genreId?.toString());
 
-  if (isLoading) return <h1 style={{padding: "70px",
-             background: "#191919",
-              color : "white", marginTop: "-70px",
-               marginBottom: "-0px", 
-               }}> </h1>
-  if (error) return <p>  {error.message}</p>;
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSkeleton(false), 1500); // Minimum loading duration
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading || showSkeleton) {
+    return (
+      <div
+        style={{
+          background: "#191919", 
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <div className="red-rectangle-spinner" />
+      </div>
+    );
+  }
+
+  if (error) return <p>{error.message}</p>;
 
   return (
     <div className="banner-container">

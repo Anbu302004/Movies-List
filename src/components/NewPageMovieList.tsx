@@ -9,6 +9,8 @@ import plusIcon from "../assets/plus.png";
 import likeIcon from "../assets/like.png";
 import downIcon from "../assets/down.png";
 import tickIcon from "../assets/tick.png";
+import CircularProgress from '@mui/material/CircularProgress';
+import Skeleton from "@mui/material/Skeleton";
 
 interface Genre {
   id: string;
@@ -66,8 +68,28 @@ const NewPageMovieList: React.FC<NewPageMovieListProps> = ({ filterIds }) => {
       localStorage.setItem("myList", JSON.stringify(updatedList));
     };
   
+    const isLoading = loadingNew || loadingTrending || loadingComedy;
+const isError = errorNew || errorTrending || errorComedy;
 
-  if (loadingNew || loadingTrending || loadingComedy) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div className="popular-container"  >
+         <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "30px" }} /> 
+        <div className="movies-grid">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div className="movie-card" key={i}>
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={200}
+                sx={{ bgcolor: "grey.900", borderRadius: "8px" }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   if (errorNew || errorTrending || errorComedy) return <p>Error loading movies.</p>;
 
   const filterMovies = (movies: Movie[]) =>

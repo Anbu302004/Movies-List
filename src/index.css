@@ -3,6 +3,38 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.red-rectangle-spinner {
+  width: 45px;
+  height: 25px;
+  background-color: #cc1e24;
+  margin: 150px auto;
+  animation: spin-rect 0.9s linear infinite;
+  border-radius: 2px;
+}
+
+@keyframes spin-rect {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(90deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  75% {
+    transform: rotate(270deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
 ::selection {
   background: #cc1e24;
   color: #fff;

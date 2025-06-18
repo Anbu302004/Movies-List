@@ -7,7 +7,8 @@ import playIcon from "../assets/play.png";
 import tickIcon from "../assets/tick.png";
 import likeIcon from "../assets/like.png";
 import downIcon from "../assets/down.png";
-import plusIcon from "../assets/plus.png";  // Assuming you have the plus icon asset
+import plusIcon from "../assets/plus.png";  
+import { CircularProgress, Skeleton } from "@mui/material";
 
 interface Genre {
   id: string;
@@ -46,6 +47,8 @@ const MyListPage = () => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => { 
     const token = localStorage.getItem("token");
@@ -59,7 +62,12 @@ const MyListPage = () => {
 
     const savedList = JSON.parse(localStorage.getItem("myList") || "[]");
     setMyList(savedList);
-  }, [navigate]);
+
+    setTimeout(() => {
+    setLoading(false); // simulate network
+  }, 1500); // loader delay
+}, 
+   [navigate]);
 
   const addToList = (movie: Movie) => {
     const currentList = JSON.parse(localStorage.getItem("myList") || "[]");
@@ -74,9 +82,27 @@ const MyListPage = () => {
     localStorage.setItem("myList", JSON.stringify(updatedList));
     setMyList(updatedList);  // Update state to re-render the component
   };
-
-  const renderMovies = () => {
+    const renderMovies = () => {
     if (myList.length === 0) return <p>Your list is empty.</p>;
+ if (loading) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "0px", backgroundColor:"#191919" }}>
+      <CircularProgress size={40} thickness={2} style={{ marginBottom: "30px", color: "#ad5766" }} />
+      <div className="movies-grid">
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div className="movie-card" key={i}>
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={200}
+              sx={{ bgcolor: "#191919", borderRadius: "8px" }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
     return (
       <div className="movies-grid">
