@@ -12,8 +12,8 @@ const PopularPage: React.FC = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
 
-  if (isGenresLoading || isLanguagesLoading) return <div>Loading filters...</div>;
-  if (error) return <div>Error loading filters.</div>;
+  if (isGenresLoading || isLanguagesLoading) return <div style={{backgroundColor: "#191919",padding: "80px 0", color: "#191919"}}>Loading filters...</div>;
+  if (error) return <div style={{backgroundColor: "#191919",padding: "80px 0", color: "#191919"}}>Error loading filters.</div>;
 
   return (
     <div className="homepage px-4">

@@ -98,7 +98,7 @@ if (loadingNew || loadingTrending || loadingComedy || loadingkids || loadingroma
 
 
 
-  if (errorNew || errorTrending || errorComedy || errorkids || errorromance) return <p>Error loading movies.</p>;
+  if (errorNew || errorTrending || errorComedy || errorkids || errorromance) return <p style={{backgroundColor: "#191919",padding: "80px 0", color: "#191919"}}>Error loading movies.</p>;
 
   const handlePrev = (listTitle: string) => {
     setPageIndexes((prev) => ({
@@ -172,8 +172,9 @@ if (loadingNew || loadingTrending || loadingComedy || loadingkids || loadingroma
 
                     <div className="movie-info">
                       {movie.topten && <div className="top-ten-badge">Top 10</div>}
-                      <span className="duration">{movie.duration_text}</span>
+                       
                       <span className="certificate">{movie.certificate}</span>
+                      <span className="duration">{movie.duration_text}</span>
                     </div>
                     <ul className="movie-genres">
                       {movie.genres.map((genre) => (
@@ -298,7 +299,7 @@ const MoviePopup: React.FC<{
         <div className="popup-details">
           <div className="left-section">
             <span className="badge">{movie.certificate}</span>
-            <span className="duration">{movie.duration_text}</span>
+            <span className="duration-pop">{movie.duration_text}</span>
             <h3>About {movie.title}</h3>
             <p className="description">{movie.content_plain || "No description available."}</p>
           </div>

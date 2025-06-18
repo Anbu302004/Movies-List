@@ -35,7 +35,7 @@ const BannerList: React.FC<BannerListProps> = ({ pageId, genreId }) => {
     );
   }
 
-  if (error) return <p>{error.message}</p>;
+  if (error) return <p style={{backgroundColor: "#191919",padding: "80px 0", color: "#191919"}}>{error.message}</p>;
 
   return (
     <div className="banner-container">

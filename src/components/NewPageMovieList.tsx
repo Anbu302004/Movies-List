@@ -72,25 +72,49 @@ const NewPageMovieList: React.FC<NewPageMovieListProps> = ({ filterIds }) => {
 const isError = errorNew || errorTrending || errorComedy;
 
   if (isLoading) {
-    return (
-      <div className="popular-container"  >
-         <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "30px" }} /> 
-        <div className="movies-grid">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div className="movie-card" key={i}>
-              <Skeleton
-                variant="rectangular"
-                width="100%"
-                height={200}
-                sx={{ bgcolor: "grey.900", borderRadius: "8px" }}
-              />
-            </div>
-          ))}
-        </div>
+  return (
+    <div
+      className="popular-container"
+      style={{
+        backgroundColor: "#191919",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "80vh", // Change to 100vh if you want full screen centering
+      }}
+    >
+      <CircularProgress
+        size={40}
+        thickness={2}
+        sx={{ color: "#ad5766", marginBottom: "30px" }}
+      />
+
+      <div
+        className="movies-grid"
+        style={{
+          display: "flex",
+          gap: "16px",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div className="movie-card" key={i}>
+            <Skeleton
+              variant="rectangular"
+              width={300}
+              height={200}
+              sx={{ bgcolor: "grey.900", borderRadius: "8px" }}
+            />
+          </div>
+        ))}
       </div>
-    );
-  }
-  if (errorNew || errorTrending || errorComedy) return <p>Error loading movies.</p>;
+    </div>
+  );
+}
+
+  if (errorNew || errorTrending || errorComedy) return <p style={{backgroundColor: "#191919",padding: "80px 0", color: "#191919"}}>Error loading movies.</p>;
 
   const filterMovies = (movies: Movie[]) =>
     filterIds ? movies.filter((movie) => filterIds.includes(movie.id)) : movies;
@@ -265,7 +289,7 @@ const MoviePopup: React.FC<{ movie: Movie; onClose: () => void }> = ({ movie, on
         <div className="popup-details">
           <div className="left-section">
             <span className="badge">{movie.certificate}</span>
-            <span className="duration">{movie.duration_text}</span>
+            <span className="duration-pop">{movie.duration_text}</span>
             <h3>About {movie.title}</h3>
             <p className="description">
               {movie.content_plain || "No description available."}

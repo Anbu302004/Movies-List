@@ -62,18 +62,29 @@ const MoviesPage: React.FC<MoviesPageProps> = ({ searchQuery }) => {
     }
   }, [selectedGenre, genreId]);
 
-  if (isGenresLoading || isLanguagesLoading) {
-    return ( 
-        <div className="popular-container" style={{ display: "flex", flexWrap: "wrap", gap: "16px", padding: "60px 0" }}>
-          <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "30px" }} /> 
-           
-            {Array.from({ length: 5 }).map((_, index) => (
-              <SkeletonMovieCard key={index} />
-            ))}
-          </div>
-       
-    );
-  }
+ if (isGenresLoading || isLanguagesLoading) {
+  return (
+    <div
+      style={{
+        backgroundColor: "#191919",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "60vh", // or 100vh if you want full-screen center
+      }}
+    >
+      <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "30px" }} />
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SkeletonMovieCard key={index} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 
   if (error) return <div>Error loading filters.</div>;
 

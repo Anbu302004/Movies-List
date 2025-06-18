@@ -91,31 +91,36 @@ const MoviesList: React.FC<MoviesListProps> = ({
     localStorage.setItem("myList", JSON.stringify(updatedList));
   };
 
-  if (isLoading) {
-    return (
-      <div className="popular-container">
-        {title && <h1 className="popular-heading">{title}</h1>}
-         <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "30px" }} /> 
-        <div className="movies-container">
-          <div className="movies-row">
-            <div className="movies-grid">
-              {Array.from({ length: 4 }).map((_, index) => (
-                 <Skeleton
-                    key={index}
-                    variant="rectangular"
-                    width={300}
-                    height={180}
-                    sx={{ bgcolor: 'grey.900', borderRadius: '8px' }}
-                  />
-              ))}
-            </div>
-          </div>
-        </div>
+if (isLoading) {
+  return (
+    <div
+      style={{
+        background: "#191919",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "60vh", // Use "100vh" for full screen
+      }}
+    >
+      <CircularProgress size={40} thickness={2} sx={{ color: "#ad5766", marginBottom: "20px" }} />
+      <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Skeleton
+            key={index}
+            variant="rectangular"
+            width={300}
+            height={180}
+            sx={{ bgcolor: 'grey.900', borderRadius: '8px' }}
+          />
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  if (error) return <p>Error loading movies: {error.message}</p>;
+
+  if (error) return <p style={{backgroundColor: "#191919",padding: "80px 0", color: "#191919"}}>Error loading movies: {error.message}</p>;
 
   const filteredMovies = movies?.filter((movie: Movie) => {
     const matchesQuery = movie.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -190,8 +195,9 @@ const MoviesList: React.FC<MoviesListProps> = ({
                       </div>
                       <div className="movie-info">
                         {movie.topten && <div className="top-ten-badge">Top 10</div>}
-                        <span className="duration">{movie.duration_text}</span>
+                        
                         <span className="certificate">{movie.certificate}</span>
+                         <span className="duration">{movie.duration_text}</span>
                       </div>
                       <ul className="movie-genres">
                         {movie.genres.map((genre) => (
@@ -292,7 +298,7 @@ const MoviePopup: React.FC<{ movie: Movie; onClose: () => void }> = ({ movie, on
         <div className="popup-details">
           <div className="left-section">
             <span className="badge">{movie.certificate}</span>
-            <span className="duration">{movie.duration_text}</span>
+            <span className="duration-pop">{movie.duration_text}</span>
             <h3>About {movie.title}</h3>
             <p className="description">{movie.content_plain || "No description available."}</p>
           </div>
