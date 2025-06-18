@@ -86,7 +86,7 @@ const MyListPage = () => {
     if (myList.length === 0) return <p>Your list is empty.</p>;
  if (loading) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "0px", backgroundColor:"#191919" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "10px", backgroundColor:"#191919" }}>
       <CircularProgress size={40} thickness={2} style={{ marginBottom: "30px", color: "#ad5766" }} />
       <div className="movies-grid">
         {Array.from({ length: 2 }).map((_, i) => (
@@ -180,8 +180,8 @@ const MyListPage = () => {
   };
 
   return (
-    <div>
-      <h1 style={{ padding: "70px", background: "#191919", color: "white", marginTop: "-70px", marginBottom: "-0px" }}>My List</h1>
+    <div >
+      <h1 style={{ padding: "70px", background: "#191919", color: "white", marginTop: "-64px", marginBottom: "-0px" , paddingTop:"130px"}}>My List</h1>
       <div className="my-list-overlay">
         {renderMovies()}
 
