@@ -151,7 +151,12 @@ const isError = errorNew || errorTrending || errorComedy;
                         )}
                         <div className="movie-actions">
                           <div className="action-icons-left">
-                            <img src={playIcon} alt="Play" className="action-icon" />
+                             <img
+                            src={playIcon}
+                            alt="Play"
+                            className="action-icon"
+                            onClick={() => window.location.href = `/watch/${movie.id}`}
+                          />
                             <img
                             src={myList.some((m) => m.id === movie.id) ? tickIcon : plusIcon}
                             alt="Toggle My List"
@@ -278,7 +283,12 @@ const MoviePopup: React.FC<{ movie: Movie; onClose: () => void }> = ({ movie, on
           <div className="popup-banner-overlay">
             <div className="movie-actions">
               <div className="action-icons-center">
-                <img src={playIcon} alt="Play" className="action-icon" />
+                <img
+                  src={playIcon}
+                  alt="Play"
+                  className="action-icon"
+                  onClick={() => window.location.href = `/watch/${movie.id}`}
+                />
                 <img src={plusIcon} alt="Add to List" className="action-icon" />
                 <img src={likeIcon} alt="Like" className="action-icon" />
               </div>
