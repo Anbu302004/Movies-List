@@ -24,6 +24,7 @@ import Membership from "./account/membership";
 import ReferFriend from "./account/referfriend";
 import BuyPlanPage from "./pages/BuyPlanPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import WatchMovie from "./pages/WatchMovie";
 
 // ✅ Protected route component
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
@@ -58,6 +59,7 @@ const App: React.FC = () => {
         <Route path="/profiles" element={<ProfilesPage />} />
         <Route path="/help" element={<Help />} />
         <Route path="/my-account" element={<ProtectedRoute element={<MyAccount />} />} />
+        <Route path="/watch/:id" element={<ProtectedRoute element={<WatchMovie />} />} />
         <Route path="/pricing" element={<PricingPage />} /> 
         <Route path="/buyplan/:planId" element={<ProtectedRoute element={<BuyPlanPage />} />} />
         <Route path="/payment-status" element={<ProtectedRoute element={<PaymentSuccessPage />} />} />

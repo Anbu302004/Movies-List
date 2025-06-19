@@ -177,7 +177,13 @@ if (isLoading) {
                       )}
                       <div className="movie-actions">
                         <div className="action-icons-left">
-                          <img src={playIcon} alt="Play" className="action-icon" />
+                         <img
+                            src={playIcon}
+                            alt="Play"
+                            className="action-icon"
+                            onClick={() => window.location.href = `/watch/${movie.id}`}
+                          />
+                        {/* <img src={playIcon} alt="Play" className="action-icon" /> */}
                           <img
                             src={myList.some((m) => m.id === movie.id) ? tickIcon : plusIcon}
                             alt="Toggle My List"

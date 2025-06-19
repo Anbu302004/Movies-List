@@ -34,22 +34,34 @@ const RegisterPage: React.FC = () => {
 
     try {
       const response = await moviesApiClient.post("/register", payload);
-
       const token = response?.data?.results?.token;
       const user = response?.data?.results?.user;
       const userId = user?.id;
-      const profileId = user?.profile?.id || user?.id; // fallback if profile.id not separate
+      const profileId = user?.profile?.id || user?.id;
       const profileName = user?.profile?.name || cleanedName;
 
-      if (token) {
-        // ✅ Set cookies and localStorage
-        Cookies.set("token", token, { expires: 7, path: "/" });
+      if (token && profileId) {
+        // ✅ Set cookies with proper options
+        Cookies.set("token", token, {
+          expires: 7,
+          path: "/",
+          sameSite: "Lax",
+          secure: true, // Set true if using HTTPS
+        });
+
+        Cookies.set("profile_id", profileId.toString(), {
+          expires: 7,
+          path: "/",
+          sameSite: "Lax",
+          secure: true, // Set true if using HTTPS
+        });
+
+        // ✅ Store in localStorage (optional)
         localStorage.setItem("token", token);
         localStorage.setItem("user_id", userId);
         localStorage.setItem("user_name", cleanedName);
         localStorage.setItem("user_phone", cleanedPhone);
 
-        // ✅ Store userProfile with profile_id
         localStorage.setItem(
           "userProfile",
           JSON.stringify({
@@ -67,7 +79,7 @@ const RegisterPage: React.FC = () => {
           },
         });
       } else {
-        alert("Something went wrong. Token not received.");
+        alert("Something went wrong. Token or profile ID missing.");
       }
     } catch (error) {
       console.error("Registration failed:", error);
