@@ -32,7 +32,7 @@ interface Movie {
 }
 
 const fetchMovieDetails = async (id: string): Promise<Movie> => {
-    const { data } = await moviesApiClient.get(`/movieslist/${id}`);
+    const { data } = await moviesApiClient.get(`/getusermovie/${id}`);
     return data;
 };
 
