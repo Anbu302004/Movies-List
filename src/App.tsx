@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 
@@ -10,8 +10,8 @@ import MyListPage from "./pages/MyListPAge";
 import MoviesPage from "./pages/MoviesPage";
 import NewPage from "./pages/NewPage";
 import PopularPage from "./pages/PopularPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage "; 
+import LoginPage from "./pages/LoginPage"; 
+import RegisterPage from "./pages/RegisterPage ";
 import SearchResults from "./pages/SearchResults";
 import OtpPage from "./pages/OtpPage";
 import ProfilesPage from "./pages/ProfilePage";
@@ -32,17 +32,24 @@ const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
   return token ? element : <Navigate to="/login" replace />;
 };
 
-const App: React.FC = () => {
+// ✅ Wrapper to conditionally hide Menu/Footer
+const AppWrapper: React.FC = () => {
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+
+  const hideMenuFooter = location.pathname.startsWith("/watch/");
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
   return (
-    <Router>
-      <Menu onSearch={handleSearch} />
-      <br /><br /><br /><br />
+    <>
+      {!hideMenuFooter && <Menu onSearch={handleSearch} />}
+      {!hideMenuFooter && <br />}
+      {!hideMenuFooter && <br />}
+      {!hideMenuFooter && <br />}
+      {!hideMenuFooter && <br />}
 
       <Routes>
         <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
@@ -69,7 +76,15 @@ const App: React.FC = () => {
         <Route path="/guest/movies/genre/:genreId" element={<MoviesPage searchQuery="" />} />
       </Routes>
 
-      <Footer />
+      {!hideMenuFooter && <Footer />}
+    </>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <AppWrapper />
     </Router>
   );
 };

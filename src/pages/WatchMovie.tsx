@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Hls from "hls.js";
 import moviesApiClient from "../services/authApiClient";
+import { ArrowLeft } from "lucide-react"; // optional: if using icon
 
 const WatchMovie = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -58,7 +59,25 @@ const WatchMovie = () => {
   if (!movieData) return <p style={{ color: "#fff" }}>Loading movie...</p>;
 
   return (
-    <div style={{ backgroundColor: "#000", height: "100vh" }}>
+    <div style={{ backgroundColor: "#000", height: "100vh", position: "relative" }}>
+      {/* 👈 Back Button */}
+      <button
+        onClick={() => navigate(-1)} // go back to previous page
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 10,
+          background: "transparent",
+          border: "none",
+          color: "#fff",
+          fontSize: "1.5rem",
+          cursor: "pointer"
+        }}
+      >
+        ← {movieData.title || "Back"}
+      </button>
+
       <video
         ref={videoRef}
         controls
