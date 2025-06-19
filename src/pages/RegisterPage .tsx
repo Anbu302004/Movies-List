@@ -34,16 +34,31 @@ const RegisterPage: React.FC = () => {
 
     try {
       const response = await moviesApiClient.post("/register", payload);
+
       const token = response?.data?.results?.token;
-      const userId = response?.data?.results?.user?.id;
+      const user = response?.data?.results?.user;
+      const userId = user?.id;
+      const profileId = user?.profile?.id || user?.id; // fallback if profile.id not separate
+      const profileName = user?.profile?.name || cleanedName;
 
       if (token) {
+        // ✅ Set cookies and localStorage
         Cookies.set("token", token, { expires: 7, path: "/" });
         localStorage.setItem("token", token);
         localStorage.setItem("user_id", userId);
         localStorage.setItem("user_name", cleanedName);
         localStorage.setItem("user_phone", cleanedPhone);
 
+        // ✅ Store userProfile with profile_id
+        localStorage.setItem(
+          "userProfile",
+          JSON.stringify({
+            profile_id: profileId,
+            name: profileName,
+          })
+        );
+
+        // ✅ Navigate to OTP page
         navigate("/otp", {
           state: {
             name: cleanedName,
@@ -97,7 +112,9 @@ const RegisterPage: React.FC = () => {
           </form>
           <p>
             Already have an account?{" "}
-            <Link to="/login" className="signin-link">Sign in</Link>
+            <Link to="/login" className="signin-link">
+              Sign in
+            </Link>
           </p>
         </div>
       </div>
