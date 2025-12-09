@@ -55,6 +55,8 @@ const AppWrapper: React.FC = () => {
         <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
         <Route path="/guest/search" element={<SearchResults />} />
         <Route path="/home" element={<HomePage searchQuery={searchQuery} />} />
+        <Route path="/latest" element={<HomePage searchQuery={searchQuery} />} />
+        <Route path="/watchlist" element={<HomePage searchQuery={searchQuery} />} />
         <Route path="/movies" element={<MoviesPage searchQuery={searchQuery} />} />
         <Route path="/new" element={<NewPage />} />
         <Route path="/popular" element={<PopularPage />} />

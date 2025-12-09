@@ -34,7 +34,6 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
         setIsLoggedIn(!!tokenFromCookie);
 
         if (tokenFromCookie) {
-          // Get user name from localStorage
           const userNameFromStorage = localStorage.getItem("user_name");
           setUserName(userNameFromStorage || "User");
         }
@@ -58,35 +57,17 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
     }
   };
 
-  const handleLogoClick = () => {
-    navigate("/");
-    window.location.reload();
-  };
-
-  const handleMenuClick = (path: string) => {
-    setIsMenuOpen(false);
-    navigate(path);
-    window.location.reload();
-  };
-
-  const handleLogout = () => {
-    Cookies.remove("token");
-    setIsLoggedIn(false);
-    setToken(undefined);
-    setUserName("User");
-    navigate("/login");
-  };
-
   return (
     <nav className="menu-container">
       <div className="menu-content">
-        <img
-          src={logo}
-          alt="Logo"
-          className="menu-logo"
-          onClick={handleLogoClick}
-          style={{ cursor: "pointer" }}
-        />
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <img
+            src={logo}
+            alt="Logo"
+            className="menu-logo"
+            style={{ cursor: "pointer" }}
+          />
+        </Link>
 
         <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <FiX size={24} color="white" /> : <FiMenu size={24} color="white" />}
@@ -100,14 +81,13 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
           ) : (
             menuItems?.map((item) => (
               <li key={item.id} className="menu-item">
-                <span
-                  onClick={() =>
-                    handleMenuClick(`/${item.name.toLowerCase().replace(/\s+/g, "")}`)
-                  }
+                <Link
+                  to={`/${item.name.toLowerCase().replace(/\s+/g, "")}`}
+                  onClick={() => setIsMenuOpen(false)}
                   style={{ cursor: "pointer", color: "white", textDecoration: "none" }}
                 >
                   {item.name}
-                </span>
+                </Link>
               </li>
             ))
           )}
@@ -149,6 +129,7 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                 className="profile-icon"
                 style={{ cursor: "pointer", width: "38px", height: "38px", borderRadius: "3px" }}
               />
+
               {dropdownOpen && (
                 <div className="profile-dropdown">
                   <div className="profile-info">
@@ -158,36 +139,23 @@ const Menu: React.FC<{ onSearch?: (query: string) => void }> = ({ onSearch }) =>
                       className="profile-dropdown-icon"
                       style={{ width: "35px", height: "35px" }}
                     />
-                    <span style={{ marginLeft: "20px" }}>
-                      {userName}
-                    </span>
+                    <span style={{ marginLeft: "20px" }}>{userName}</span>
                   </div>
-                  <ul style={{ textDecoration: "none" }}>
+                  <ul>
                     <li style={{ cursor: "pointer" }} onClick={() => navigate("/browse")}>
-                      <img
-                        src={pencilIcon}
-                        alt="Manage"
-                        style={{ width: "17px", float: "left", marginRight: "10px" }}
-                      />
+                      <img src={pencilIcon} alt="Manage" style={{ width: "17px", marginRight: "10px" }} />
                       Manage Profile
                     </li>
                     <li style={{ cursor: "pointer" }} onClick={() => navigate("/my-account")}>
-                      <img
-                        src={accountIcon}
-                        alt="Account"
-                        style={{ width: "17px", float: "left", marginRight: "10px" }}
-                      />
+                      <img src={accountIcon} alt="Account" style={{ width: "17px", marginRight: "10px" }} />
                       Account
                     </li>
                     <li style={{ cursor: "pointer" }} onClick={() => navigate("/help")}>
-                      <img
-                        src={helpIcon}
-                        alt="Help"
-                        style={{ width: "17px", float: "left", marginRight: "10px" }}
-                      />
+                      <img src={helpIcon} alt="Help" style={{ width: "17px", marginRight: "10px" }} />
                       Help Center
                     </li>
-                    <li onClick={handleLogout} style={{ cursor: "pointer", textAlign: "center" }}>
+                    <li onClick={() => { Cookies.remove("token"); navigate("/login"); }}
+                        style={{ cursor: "pointer", textAlign: "center" }}>
                       Logout
                     </li>
                   </ul>
