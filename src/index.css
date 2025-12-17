@@ -896,7 +896,7 @@ body {
 
 /* ======== LOGO ======== */
 .menu-logo {
-  width: 110px;
+  width: 200px;
   cursor: pointer;
   object-fit: contain;
 }
@@ -904,6 +904,7 @@ body {
 /* ======== MENU LIST (Desktop) ======== */
 .menu-list {
   display: flex;
+  list-style: none;  
   flex: 1;
   justify-content: center;
   gap: 30px;
