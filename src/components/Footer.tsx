@@ -23,7 +23,7 @@ const Footer = () => {
           <div className='footer-section'>
             <h4>Contact</h4>
             <Link to="/"><img src={Logo} alt="Logo" className="footer-logo" /></Link>
-            <p>Email us: support@bestcaststudios.com</p>
+            <p>Email us: support@mowimax.com</p>
           </div>
 
           {/* Quick Links */}

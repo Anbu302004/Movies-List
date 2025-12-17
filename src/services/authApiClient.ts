@@ -1,13 +1,14 @@
 import axios from "axios";
 
-// Use env variable or fallback to localhost for local testing
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+export const API_BASE_URL = "/api";
+export const IMAGE_BASE_URL = "https://movies.harikaran.com/";
 
 const moviesApiClient = axios.create({
-  baseURL: API_URL,
-  timeout: 10000,
-  headers: { "Content-Type": "application/json" },
-  withCredentials: true, // required if backend uses cookies/sessions
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+    headers: {
+        "Content-Type": "application/json",
+    },
 });
 
 export default moviesApiClient;
