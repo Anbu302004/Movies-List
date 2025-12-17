@@ -46,7 +46,7 @@ const Help: React.FC = () => {
             <p>* <strong>Payment Methods: </strong>Add, remove, or update payment methods.</p>
             <p><strong style={{ fontSize: '1.1rem', fontWeight:"bold"}}>12. Contact Support:</strong></p>
             <p>
-              *<strong> Email Support:</strong> Contact us via email – <span style={{ color: '#cc1e24',cursor:"pointer"}}>support@bestcaststudios.com</span> for any support.
+              *<strong> Email Support:</strong> Contact us via email – <span style={{ color: '#cc1e24',cursor:"pointer"}}>support@mowimax.com.</span> for any support.
             </p>
           </div>
         </div>
