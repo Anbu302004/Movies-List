@@ -23,7 +23,7 @@ const Footer = () => {
           <div className='footer-section'>
             <h4>Contact</h4>
             <Link to="/"><img src={Logo} alt="Logo" className="footer-logo" /></Link>
-            <p>Email us: support@bestcaststudios.com</p>
+            <p>Email us: support@mowimax.com</p>
           </div>
 
           {/* Quick Links */}
@@ -49,9 +49,9 @@ const Footer = () => {
           {/* Address with Social Icons */}
           <div className='footer-section'>
             <h4>Address</h4>
-            <p>Flat - E, 2nd floor, Gilli Flower,</p>
-            <p>Old no-46, New no - 6, 23rd Street, L- Block,</p>
-            <p>Anna Nagar East, Chennai - 600 102</p>
+            <p>#01-382 Suntec City,</p>
+            <p>North Wing Block 6,</p>
+            <p>Singapore - 038983</p>
             <div className="social-icons" style={{ marginTop: '15px', display: 'flex', gap: '15px' }}>
               <img src={facebookIcon} alt="Facebook" className="social-icon" />
               <img src={instagramIcon} alt="Instagram" className="social-icon" />
@@ -65,7 +65,7 @@ const Footer = () => {
       {/* Second Footer Below */}
       <div
         className="footer-second">
-        © 24 BESTCAST METAVERSE LIMITED. All Rights Reserved.
+       © 2025 mowimax. All Rights Reserved.
       </div>
     </>
   );
